@@ -1,0 +1,15 @@
+---
+- name: perform the common tasks on all the nodes
+  hosts: all
+  roles: 
+  - roles/common
+- name: establish password less ssh connections
+  hosts: gateway
+  gather_facts: false
+  roles: 
+  - roles/password-less-ssh
+- name: setup mysql databases
+  hosts: db
+  roles: 
+  - role: roles/database-mysql
+    when: dbflavour == "mysql"

@@ -1,0 +1,6 @@
+---
+release:
+        ambari:
+        hdf:
+        purge-mpack: yes
+...

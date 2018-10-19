@@ -1,0 +1,18 @@
+---
+dbflavour: mysql
+dba:
+    name: root
+    pswd: passW0rd
+users:
+    - user: ambari
+      pswd: bigdata
+    - user: streamline  
+      pswd: streamline
+    - user: registry  
+      pswd: registry
+    - user: rangerdba  
+      pswd: rangerdba      
+    - user: druid  
+      pswd: druid 
+    - user: superset  
+      pswd: superset       

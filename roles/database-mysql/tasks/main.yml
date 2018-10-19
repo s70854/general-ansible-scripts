@@ -1,0 +1,51 @@
+---
+# tasks file for database-mysql
+- name: install mariadb for RedHat systems
+  yum: name="mariadb-server.{{ ansible_architecture }}" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"
+- name: enable service mariadb for RedHat systems
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+- name: set password for dba
+  mysql_user:
+    name: "{{ dba.name }}"
+    host_all: yes
+    state: present
+    update_password: always
+    password: "{{ dba.pswd }}"
+    check_implicit_admin: yes
+    login_password: "{{ dba.pswd }}"
+    login_user: "{{ dba.name }}"   
+- name: delete service db users (for debugging purpose) 
+  mysql_user:
+    name: "{{ item.user }}"
+    host: '%'
+    host_all: yes
+    state: absent
+    priv: '*.*:ALL'
+    update_password: always
+    password: "{{ item.pswd }}"  
+    login_password: "{{ dba.pswd }}"
+    login_user: "{{ dba.name }}"
+  loop: "{{ users }}"    
+- name: create service db users 
+  mysql_user:
+    name: "{{ item.user }}"
+    state: present
+    priv: '*.*:ALL' 
+    login_password: "{{ dba.pswd }}"
+    login_user: "{{ dba.name }}"
+  loop: "{{ users }}"
+- name: set pswd for service db users 
+  mysql_user:
+    name: "{{ item.user }}"
+    host_all: yes
+    state: present
+    update_password: always
+    priv: '*.*:ALL' 
+    password: "{{ item.pswd }}"  
+    login_password: "{{ dba.pswd }}"
+    login_user: "{{ dba.name }}"
+  loop: "{{ users }}"  

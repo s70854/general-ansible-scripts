@@ -1,0 +1,32 @@
+#pip install pexpect==3..3
+---
+- name: create .ssh dir
+  file:
+    path: /root/.ssh
+    state: directory
+    mode: 0700
+- name: generate public and private SSH keys on the Ambari Server host
+  expect:
+    command: ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa
+    responses:
+      Overwrite: "y"
+- name: read the public key
+  command: cat /root/.ssh/id_rsa.pub
+  register: pubkey 
+- name: add the SSH Public Key to the authorized_keys file on your target hosts
+  lineinfile: 
+    state: present
+    create: yes
+    insertafter: EOF
+    dest: /root/.ssh/authorized_keys
+    line: "{{ pubkey.stdout }}"
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['all']}}"   
+- name: test the ssh connectivity  
+  expect:
+    command: ssh root@{{item}} ls
+    responses:
+      "yes/no": "yes"
+  with_items: "{{ groups['all'] }}"
+...
