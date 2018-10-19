@@ -1,4 +1,8 @@
 ---
+- name: Include vars of db.yml 
+  include_vars:
+    file: db.yml
+    name: db
 - name: Download ambari.repo
   get_url:
     url: "{{release.ambari.url}}"
@@ -39,8 +43,8 @@
     state: import
     name: ambari
     target: /root/Ambari-DDL-MySQL-CREATE.sql    
-    login_password: "ambari"
-    login_user: "bigdata"   
+    login_password: "{{db.dba.pswd}}"
+    login_user: "{{db.dba.user}}"   
 - name: start the ambari-server
   command: ambari-server restart    
 ...
