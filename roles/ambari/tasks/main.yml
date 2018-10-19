@@ -1,0 +1,50 @@
+---
+- name: Include vars of db.yml 
+  include_vars:
+    file: "{{inventory_dir}}/group_vars/db.yml"
+    name: db
+- name: Download ambari.repo
+  get_url:
+    url: "{{release.ambari.url}}"
+    dest: /etc/yum.repos.d/ambari.repo
+    force: yes
+- name: Install ambari server
+  yum: name="ambari-server" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"   
+- name: setup the ambari-server
+  expect:
+    command: ambari-server setup -j "{{ java.home }}"
+    responses:
+      OK to continue: "y"
+      Customize user account for ambari-server daemon: "n" 
+      GPL Licensed LZO packages: "y"
+      Enter advanced database configuration: "y"
+      Enter choice: "3"
+      Hostname: "{{groups['db'][0]}}"
+      Port: ""
+      Database: ""
+      Username: ""
+      Database Password: ""
+      Should ambari use existing default jdbc: "y"
+      Proceed with configuring remote database connection properties: "y"
+- name: read DDL file
+  command: cat /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
+  register: ddl       
+- name: copy DDL file to db host
+  delegate_to: "{{groups['db'][0]}}"
+  copy:
+    content: "{{ ddl.stdout }}"
+    dest: /root/Ambari-DDL-MySQL-CREATE.sql 
+- name: configure jdbc-db
+  command: ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
+- name: Run the DDL against the database to create the schema
+  delegate_to: "{{groups['db'][0]}}"
+  mysql_db:
+    state: import
+    name: ambari
+    target: /root/Ambari-DDL-MySQL-CREATE.sql    
+    login_password: "{{db.dba.pswd}}"
+    login_user: "{{db.dba.name}}"    
+- name: start the ambari-server
+  command: ambari-server restart    
+...
