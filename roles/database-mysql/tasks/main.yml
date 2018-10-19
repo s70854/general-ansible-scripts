@@ -18,34 +18,15 @@
     check_implicit_admin: yes
     login_password: "{{ dba.pswd }}"
     login_user: "{{ dba.name }}"   
-- name: delete service db users (for debugging purpose) 
-  mysql_user:
-    name: "{{ item.user }}"
-    host: '%'
-    host_all: yes
-    state: absent
-    priv: '*.*:ALL'
-    update_password: always
-    password: "{{ item.pswd }}"  
+- template: 
+    src: templates/db-and-users.sql.j2
+    dest: /root/db-and-users.sql
+    mode: 0755  
+- name: create the db and corresponding users
+  mysql_db:
+    state: import
+    name: all
+    target: /root/db-and-users.sql  
     login_password: "{{ dba.pswd }}"
-    login_user: "{{ dba.name }}"
-  loop: "{{ users }}"    
-- name: create service db users 
-  mysql_user:
-    name: "{{ item.user }}"
-    state: present
-    priv: '*.*:ALL' 
-    login_password: "{{ dba.pswd }}"
-    login_user: "{{ dba.name }}"
-  loop: "{{ users }}"
-- name: set pswd for service db users 
-  mysql_user:
-    name: "{{ item.user }}"
-    host_all: yes
-    state: present
-    update_password: always
-    priv: '*.*:ALL' 
-    password: "{{ item.pswd }}"  
-    login_password: "{{ dba.pswd }}"
-    login_user: "{{ dba.name }}"
-  loop: "{{ users }}"  
+    login_user: "{{ dba.name }}"      
+    
