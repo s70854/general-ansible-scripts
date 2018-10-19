@@ -7,7 +7,7 @@
     
 2, establish password less ssh connections
 3, setup mysql databases
-4, ? setup kdc
+4, setup kdc
 5, ? install ambari-server
 6, ? deploy blueprints
 7, ? wire encryption
