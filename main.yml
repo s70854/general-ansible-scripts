@@ -13,3 +13,12 @@
   roles: 
   - role: roles/database-mysql
     when: dbflavour == "mysql"
+- name: setup kerberos
+  hosts: kdc
+  roles: 
+  - role: roles/kdc    
+- name: setup ambari server
+  hosts: gateway
+  roles: 
+  - role: roles/ambari
+  

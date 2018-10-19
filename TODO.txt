@@ -2,12 +2,13 @@
     Install pexpect. It is required for interactive command line operations
     Install and enable NTP for RedHat systems 
     Download and set up database connectors for RedHat systems
-    
-    ?install Java8
-    
+    install Java8
 2, establish password less ssh connections
 3, setup mysql databases
 4, setup kdc
-5, ? install ambari-server
+5, install ambari-server
+
+========[ 7 minuites so far]
+
 6, ? deploy blueprints
 7, ? wire encryption
