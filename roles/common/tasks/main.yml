@@ -24,6 +24,19 @@
     - mysql-connector-java
     - postgresql-jdbc
     - MySQL-python
+- name: install java
+  yum: name="{{ item }}" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"
+  loop: 
+    - java-1.8.0-openjdk
+    - java-1.8.0-openjdk-devel
+    - java-1.8.0-openjdk-headless    
+- name: configure java home
+  lineinfile:
+    path: /root/.bashrc
+    line: 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk'
+    insertafter: EOF
+    
 #- name: disable service firewalld 
 #  systemd:
 #    name: firewalld
