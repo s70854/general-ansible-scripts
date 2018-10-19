@@ -1,0 +1,13 @@
+---
+- name: Install a new version of the KDC server
+  yum: name="{{ item }}" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"
+  loop: 
+    - krb5-server
+    - krb5-libs
+    - krb5-workstation
+- template: 
+    src: templates/krb5.conf.j2
+    dest: /etc/krb5.conf
+    mode: 0755
+...
