@@ -1,9 +1,14 @@
-{% for db in users %}
-DROP DATABASE IF EXISTS `{{db.user}}`;
-DELETE FROM mysql.user WHERE USER='{{db.user}}';
+{% for user, db in users.items() %}
+DROP DATABASE IF EXISTS `{{db.name}}`;
+DELETE FROM mysql.user WHERE USER='{{db.name}}';
 FLUSH PRIVILEGES;
-CREATE DATABASE `{{db.user}}` /*!40100 DEFAULT CHARACTER SET utf8 */;
-CREATE USER '{{db.user}}'@'%' IDENTIFIED BY '{{db.pswd}}';
-GRANT ALL PRIVILEGES ON {{db.user}}.* TO '{{db.user}}'@'%';
+{% endfor %}
+commit;
+{% for user, db in users.items() %}
+CREATE DATABASE `{{db.name}}` /*!40100 DEFAULT CHARACTER SET utf8 */;
+{% for host in ['%','localhost','127.0.0.1','::1'] %}
+CREATE USER '{{db.name}}'@'{{host}}' IDENTIFIED BY '{{db.pswd}}';
+{% endfor %}
+GRANT ALL PRIVILEGES ON {{db.name}}.* TO '{{db.name}}'@'%';
 {% endfor %}
 commit;

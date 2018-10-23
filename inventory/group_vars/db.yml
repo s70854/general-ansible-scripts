@@ -4,15 +4,21 @@ dba:
     name: root
     pswd: passW0rd
 users:
-    - user: ambari
+    ambari:
+      name: ambari
       pswd: bigdata
-    - user: streamline  
+    streamline:
+      name: streamline  
       pswd: streamline
-    - user: registry  
+    registry:
+      name: registry  
       pswd: registry
-    - user: rangerdba  
-      pswd: rangerdba      
-    - user: druid  
+    rangerdba:
+      name: rangerdba  
+      pswd: rangerdba 
+    druid:     
+      name: druid  
       pswd: druid 
-    - user: superset  
+    superset:
+      name: superset  
       pswd: superset       
