@@ -35,6 +35,9 @@
       Enter password for principal: "{{ admin_princ_pswd }}"
       Re-enter password for principal: "{{ admin_princ_pswd }}"
   when: ansible_facts['os_family'] == "RedHat" 
+- name: ensure that kdc acl file includes the realm
+  shell: sed -i '1,$s/EXAMPLE.COM/{{realm}}/g' /var/kerberos/krb5kdc/kadm5.acl
+  when: ansible_facts['os_family'] == "RedHat" 
 - name: restart the kadmin process
   systemd:
     name: kadmin

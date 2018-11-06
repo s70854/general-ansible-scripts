@@ -42,6 +42,12 @@
     path: /root/.bashrc
     line: "export JAVA_HOME={{java.home}}"
     insertafter: EOF
+- template:
+    src: templates/hosts.j2
+    dest: /root/hosts
+    mode: 0755
+- name:  update host mapping in all the nodes
+  shell:  cat /root/hosts >> /etc/hosts
     
 #- name: disable service firewalld 
 #  systemd:
