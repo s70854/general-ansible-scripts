@@ -1,14 +1,16 @@
 ---
 release:
         ambari: 
-            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.3.0-47/ambaribn.repo
+            url: http://public-repo-1.hortonworks.com/ambari/centos7-ppc/2.x/updates/2.7.0.0/ambari.repo
         hdf:
-            url: http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7/3.x/BUILDS/3.3.0.0-120/hdfbn.repo
-            mpack: http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7/3.x/BUILDS/3.3.0.0-120/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.0.0-120.tar.gz
+            url:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/hdf.repo
+            mpack:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.2.0.0-520.tar.gz
 install:
         hdf:
             install: no
             purge:  yes
 java:
-    home: /usr/lib/jvm/java-1.8.0-openjdk
+    home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
+# ibm-cloud   home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
+# ycloud      home:  /usr/lib/jvm/java-1.8.0-openjdk
 ...
