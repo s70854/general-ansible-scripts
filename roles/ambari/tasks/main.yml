@@ -45,6 +45,15 @@
     target: /root/Ambari-DDL-MySQL-CREATE.sql    
     login_password: "{{db.dba.pswd}}"
     login_user: "{{db.dba.name}}"    
+- name: install HDF mpack with purge option
+  expect:
+    command: ambari-server install-mpack --mpack="{{ release.hdf.mpack }}"  --purge
+    responses:
+      you want to perform the purge: "yes"
+  when: mpack.hdf.install  and mpack.hdf.purge
+- name: install HDF mpack with out  purge option
+  command: ambari-server install-mpack --mpack="{{ release.hdf.mpack }}"
+  when: mpack.hdf.install  and not mpack.hdf.purge
 - name: start the ambari-server
   command: ambari-server restart    
 ...
