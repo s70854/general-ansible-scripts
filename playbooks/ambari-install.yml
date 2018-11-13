@@ -1,0 +1,6 @@
+---
+- name: setup ambari server
+  hosts: gateway
+  roles: 
+  - role: roles/ambari
+  
