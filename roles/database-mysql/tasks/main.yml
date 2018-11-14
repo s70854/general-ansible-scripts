@@ -10,14 +10,14 @@
     enabled: yes
 - name: set password for dba
   mysql_user:
-    name: "{{ dba.name }}"
+    name: "{{ database.dba.name }}"
     host_all: yes
     state: present
     update_password: always
-    password: "{{ dba.pswd }}"
+    password: "{{ database.dba.pswd }}"
     check_implicit_admin: yes
-    login_password: "{{ dba.pswd }}"
-    login_user: "{{ dba.name }}"   
+    login_password: "{{ database.dba.pswd }}"
+    login_user: "{{ database.dba.name }}"   
 - template: 
     src: templates/db-and-users.sql.j2
     dest: /root/db-and-users.sql
@@ -27,6 +27,6 @@
     state: import
     name: all
     target: /root/db-and-users.sql  
-    login_password: "{{ dba.pswd }}"
-    login_user: "{{ dba.name }}"      
+    login_password: "{{ database.dba.pswd }}"
+    login_user: "{{ database.dba.name }}"      
     

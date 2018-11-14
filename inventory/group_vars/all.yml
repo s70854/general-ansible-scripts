@@ -1,16 +1,54 @@
 ---
+# release related configurations
 release:
         ambari: 
-            url: http://public-repo-1.hortonworks.com/ambari/centos7-ppc/2.x/updates/2.7.0.0/ambari.repo
+            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.3.0-90/ambaribn.repo
         hdf:
             url:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/hdf.repo
             mpack:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.2.0.0-520.tar.gz
-mpack:
-        hdf:
-            install: yes 
-            purge:  yes
+            install: no 
+            purge: no 
+
+
+# java-configurations
+# ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
+# ycloud java_home:  /usr/lib/jvm/java-1.8.0-openjdk
 java:
-    home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
-# ibm-cloud   home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
-# ycloud      home:  /usr/lib/jvm/java-1.8.0-openjdk
+    home:  /usr/lib/jvm/java-1.8.0-openjdk
+
+
+# database configurations
+database:
+        dbflavour: mysql
+        dba:
+           name: root
+           pswd: passW0rd
+        users:
+             ambari:
+                   name: ambari
+                   pswd: bigdata
+             streamline:
+                   name: streamline
+                   pswd: streamline
+             registry:
+                   name: registry
+                   pswd: registry
+             rangerdba:
+                   name: rangerdba
+                   pswd: rangerdba
+             druid:
+                   name: druid
+                   pswd: druid
+             superset:
+                   name: superset
+                   pswd: superset
+
+
+
+# security-kerberos configurations
+kerberos:
+    enable: yes
+    realm: HDF.COM
+    db_master_key: passW0rd
+    admin_princ_pswd: passW0rd
 ...

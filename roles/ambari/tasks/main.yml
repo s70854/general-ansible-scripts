@@ -1,8 +1,4 @@
 ---
-- name: Include vars of db.yml 
-  include_vars:
-    file: "{{inventory_dir}}/group_vars/db.yml"
-    name: db
 - name: Download ambari.repo
   get_url:
     url: "{{release.ambari.url}}"
@@ -43,17 +39,17 @@
     state: import
     name: ambari
     target: /root/Ambari-DDL-MySQL-CREATE.sql    
-    login_password: "{{db.dba.pswd}}"
-    login_user: "{{db.dba.name}}"    
+    login_password: "{{database.dba.pswd}}"
+    login_user: "{{database.dba.name}}"    
 - name: install HDF mpack with purge option
   expect:
     command: ambari-server install-mpack --mpack="{{ release.hdf.mpack }}"  --purge
     responses:
       you want to perform the purge: "yes"
-  when: mpack.hdf.install  and mpack.hdf.purge
+  when: release.hdf.install  and release.hdf.purge
 - name: install HDF mpack with out  purge option
   command: ambari-server install-mpack --mpack="{{ release.hdf.mpack }}"
-  when: mpack.hdf.install  and not mpack.hdf.purge
+  when: release.hdf.install  and not release.hdf.purge
 - name: start the ambari-server
   command: ambari-server restart    
 ...
