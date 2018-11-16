@@ -1,0 +1,6 @@
+---
+- template: 
+    src: templates/{{blueprint.location}}/blueprint.json.j2
+    dest: /root/blueprint.json
+    mode: 0755
+...

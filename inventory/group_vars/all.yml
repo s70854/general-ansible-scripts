@@ -10,6 +10,8 @@ release:
             purge: no 
 
 
+blueprint:
+    location: hdp_303_static_01
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
 # ycloud java_home:  /usr/lib/jvm/java-1.8.0-openjdk

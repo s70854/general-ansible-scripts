@@ -1,0 +1,769 @@
+{
+    "Blueprints": {
+        "blueprint_name": "blueprint-def", 
+        "stack_name": "HDP", 
+        "stack_version": "3.0"
+    }, 
+    "configurations": [
+        {
+            "ranger-knox-plugin-properties": {
+                "properties": {
+                    "XAAUDIT.DB.IS_ENABLED": "false", 
+                    "common.name.for.certificate": "", 
+                    "ranger-knox-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "mapred-site": {
+                "properties": {
+                    "mapreduce.am.max-attempts": "20"
+                }
+            }
+        }, 
+        {
+            "ranger-yarn-plugin-properties": {
+                "properties": {
+                    "REPOSITORY_CONFIG_USERNAME": "yarn", 
+                    "common.name.for.certificate": "-", 
+                    "policy_user": "ambari-qa", 
+                    "ranger-yarn-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "ranger-admin-site": {
+                "properties": {
+                    "ranger.audit.source.type": "solr", 
+                    "ranger.jpa.jdbc.driver": "com.mysql.jdbc.Driver", 
+                    "ranger.jpa.jdbc.url": "jdbc:{{database.dbflavour}}://{{hostvars[groups['db'][0]].ansible_fqdn}}/{{database.users.rangerdba.name}}"
+                }
+            }
+        }, 
+        {
+            "ranger-env": {
+                "properties": {
+                    "admin_password": "Rangerpassword@123", 
+                    "is_external_solrCloud_enabled": "false", 
+                    "is_external_solrCloud_kerberos": "false", 
+                    "is_solrCloud_enabled": "true", 
+                    "keyadmin_user_password": "Rangerpassword@123", 
+                    "ranger-atlas-plugin-enabled": "Yes", 
+                    "ranger-hbase-plugin-enabled": "Yes", 
+                    "ranger-hdfs-plugin-enabled": "Yes", 
+                    "ranger-hive-plugin-enabled": "Yes", 
+                    "ranger-kafka-plugin-enabled": "Yes", 
+                    "ranger-knox-plugin-enabled": "Yes", 
+                    "ranger-storm-plugin-enabled": "Yes", 
+                    "ranger-yarn-plugin-enabled": "Yes", 
+                    "ranger_admin_password": "Rangerpassword@123", 
+                    "ranger_privelege_user_jdbc_url": "jdbc:{{database.dbflavour}}://{{hostvars[groups['db'][0]].ansible_fqdn}}:3306"
+                    "create_db_dbuser": "Yes",
+                    "rangertagsync_user_password": "Rangerpassword@123", 
+                    "rangerusersync_user_password": "Rangerpassword@123", 
+                    "xasecure.audit.destination.solr": "true"
+                }
+            }
+        }, 
+        {
+            "ams-hbase-site": {
+                "properties": {
+                    "hbase.rootdir": "file:///grid/0/lib/ambari-metrics-collector/hbase", 
+                    "hbase.tmp.dir": "/grid/0/lib/ambari-metrics-collector/hbase-tmp"
+                }
+            }
+        }, 
+        {
+            "ranger-kafka-plugin-properties": {
+                "properties": {
+                    "ranger-kafka-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "ams-grafana-env": {
+                "properties": {
+                    "metrics_grafana_password": "admin"
+                }
+            }
+        }, 
+        {
+            "ams-hbase-env": {
+                "properties": {
+                    "hbase_log_dir": "/grid/0/log/metric_collector"
+                }
+            }
+        }, 
+        {
+            "kerberos-env": {
+                "properties": {
+                    "admin_server_host": "{{hostvars[groups['kdc'][0]].ansible_fqdn}}", 
+                    "encryption_types": "aes des3-cbc-sha1 rc4 des-cbc-md5", 
+                    "kdc_hosts": "{{hostvars[groups['kdc'][0]].ansible_fqdn}}", 
+                    "kdc_type": "mit-kdc", 
+                    "realm": "{{kerberos.realm}}", 
+                    "service_check_principal_name": "cl1-7D6HQ1NTHV"
+                }
+            }
+        }, 
+        {
+            "admin-properties": {
+                "properties": {
+                    "DB_FLAVOR": "MYSQL", 
+                    "SQL_CONNECTOR_JAR": "/usr/share/java/mysql-connector-java.jar", 
+                    "audit_db_name": "ranger_audit", 
+                    "audit_db_password": "rangerlogger", 
+                    "audit_db_user": "rangerlogger", 
+                    "db_host": "{{hostvars[groups['db'][0]].ansible_fqdn}}", 
+                    "db_name": "ranger", 
+                    "db_password": "rangeradmin", 
+                    "db_root_password": "{{database.dba.pswd}}", 
+                    "db_root_user": "{{database.dba.name}}", 
+                    "db_user": "rangeradmin", 
+                    "policymgr_external_url": "http://%HOSTGROUP::host_group_master%:6080"
+                }
+            }
+        }, 
+        {
+            "tez-site": {
+                "properties": {
+                    "tez.am.max.app.attempts": "20", 
+                    "tez.am.resource.memory.mb": "2048", 
+                    "tez.lib.uris": "/hdp/apps/${hdp.version}/tez/tez.tar.gz", 
+                    "tez.runtime.io.sort.mb": "819", 
+                    "tez.runtime.unordered.output.buffer.size-mb": "184"
+                }
+            }
+        }, 
+        {
+            "ranger-atlas-plugin-properties": {
+                "properties": {
+                    "REPOSITORY_CONFIG_USERNAME": "atlas", 
+                    "ranger-atlas-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "hdfs-site": {
+                "properties": {
+                    "dfs.client.failover.proxy.provider.mycluster": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider", 
+                    "dfs.datanode.data.dir": "/grid/0/hadoop/hdfs/data", 
+                    "dfs.datanode.https.address": "0.0.0.0:20475", 
+                    "dfs.disk.balancer.enabled": "true", 
+                    "dfs.ha.automatic-failover.enabled": "true", 
+                    "dfs.ha.fencing.methods": "shell(/bin/true)", 
+                    "dfs.ha.namenodes.mycluster": "nn1,nn2", 
+                    "dfs.hosts.exclude": "/etc/hadoop/conf/dfs.exclude", 
+                    "dfs.http.policy": "HTTP_ONLY", 
+                    "dfs.https.port": "20470", 
+                    "dfs.journalnode.edits.dir": "/hadoop/hdfs/journal", 
+                    "dfs.journalnode.http-address": "0.0.0.0:8480", 
+                    "dfs.namenode.accesstime.precision": "0", 
+                    "dfs.namenode.avoid.read.stale.datanode": "true", 
+                    "dfs.namenode.avoid.write.stale.datanode": "true", 
+                    "dfs.namenode.checkpoint.dir": "/hadoop/hdfs/namesecondary", 
+                    "dfs.namenode.checkpoint.edits.dir": "${dfs.namenode.checkpoint.dir}", 
+                    "dfs.namenode.checkpoint.period": "21600", 
+                    "dfs.namenode.checkpoint.txns": "1000000", 
+                    "dfs.namenode.handler.count": "40", 
+                    "dfs.namenode.http-address": "%HOSTGROUP::host_group_master%:20070", 
+                    "dfs.namenode.http-address.mycluster.nn1": "%HOSTGROUP::host_group_master%:20070", 
+                    "dfs.namenode.http-address.mycluster.nn2": "%HOSTGROUP::host_group_ha_master%:20070", 
+                    "dfs.namenode.https-address": "%HOSTGROUP::host_group_master%:20470", 
+                    "dfs.namenode.https-address.mycluster.nn1": "%HOSTGROUP::host_group_master%:20470", 
+                    "dfs.namenode.https-address.mycluster.nn2": "%HOSTGROUP::host_group_ha_master%:20470", 
+                    "dfs.namenode.inode.attributes.provider.class": "org.apache.ranger.authorization.hadoop.RangerHdfsAuthorizer", 
+                    "dfs.namenode.name.dir": "/hadoop/hdfs/namenode", 
+                    "dfs.namenode.name.dir.restore": "true", 
+                    "dfs.namenode.rpc-address": "%HOSTGROUP::host_group_master%:8020", 
+                    "dfs.namenode.rpc-address.mycluster.nn1": "%HOSTGROUP::host_group_master%:8020", 
+                    "dfs.namenode.rpc-address.mycluster.nn2": "%HOSTGROUP::host_group_ha_master%:8020", 
+                    "dfs.namenode.safemode.extension": "5000", 
+                    "dfs.namenode.safemode.threshold-pct": "1", 
+                    "dfs.namenode.secondary.http-address": "0.0.0.0:50090", 
+                    "dfs.namenode.shared.edits.dir": "qjournal://localhost:8485/mycluster", 
+                    "dfs.nameservices": "mycluster", 
+                    "dfs.replication": "3", 
+                    "dfs.replication.max": "50", 
+                    "dfs.support.append": "true", 
+                    "nfs.udp.client.portmap.timeout.millis": "5000"
+                }
+            }
+        }, 
+        {
+            "ams-env": {
+                "properties": {
+                    "metrics_collector_log_dir": "/grid/0/log/metric_collector", 
+                    "metrics_monitor_log_dir": "/grid/0/log/metric_monitor"
+                }
+            }
+        }, 
+        {
+            "ams-site": {
+                "properties": {
+                    "timeline.metrics.hbase.init.check.enabled": "false", 
+                    "timeline.metrics.service.rpc.address": "0.0.0.0:20200"
+                }
+            }
+        }, 
+        {
+            "kafka-broker": {
+                "properties": {
+                    "authorizer.class.name": "org.apache.ranger.authorization.kafka.authorizer.RangerKafkaAuthorizer", 
+                    "log.dirs": "/grid/0/kafka-logs", 
+                    "zookeeper.connection.timeout.ms": "360000"
+                }
+            }
+        }, 
+        {
+            "hbase-site": {
+                "properties": {
+                    "hbase.master.info.port": "30010", 
+                    "hbase.master.port": "20000", 
+                    "hbase.regionserver.info.port": "20030", 
+                    "hbase.rootdir": "hdfs://mycluster/apps/hbase/data"
+                }
+            }
+        }, 
+        {
+            "hive-site": {
+                "properties": {
+                    "ambari.hive.db.schema.name": "hivedb", 
+                    "atlas.hook.hive.maxThreads": "1", 
+                    "atlas.hook.hive.minThreads": "1", 
+                    "hive.execution.engine": "tez", 
+                    "hive.metastore.uris": "thrift://%HOSTGROUP::host_group_ha_master%:9083,thrift://%HOSTGROUP::host_group_master%:9083", 
+                    "hive.query.results.cache.enabled": "false", 
+                    "hive.security.authorization.enabled": "true", 
+                    "hive.server2.enable.doAs": "false", 
+                    "hive.tez.container.size": "4096", 
+                    "hive.tez.java.opts": "-server -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseG1GC -XX:+ResizeTLAB -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps", 
+                    "javax.jdo.option.ConnectionDriverName": "com.{{database.dbflavour}}.jdbc.Driver", 
+                    "javax.jdo.option.ConnectionPassword": "password", 
+                    "javax.jdo.option.ConnectionURL": "jdbc:{{database.dbflavour}}://{{hostvars[groups['kdc'][0]].ansible_fqdn}}/hivedb?createDatabaseIfNotExist=true", 
+                    "javax.jdo.option.ConnectionUserName": "hiveuser"
+                }
+            }
+        }, 
+        {
+            "mapred-env": {
+                "properties": {
+                    "mapred_log_dir_prefix": "/grid/0/log/hadoop-mapreduce", 
+                    "mapreduce_log_dir_prefix": "/grid/0/log/hadoop-mapreduce"
+                }
+            }
+        }, 
+        {
+            "ranger-hive-plugin-properties": {
+                "properties": {
+                    "ranger-hive-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "ranger-hdfs-plugin-properties": {
+                "properties": {
+                    "REPOSITORY_CONFIG_USERNAME": "hadoop", 
+                    "common.name.for.certificate": "-", 
+                    "policy_user": "ambari-qa", 
+                    "ranger-hdfs-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "knox-env": {
+                "properties": {
+                    "knox_master_secret": "knoxsecret"
+                }
+            }
+        }, 
+        {
+            "core-site": {
+                "properties": {
+                    "fs.azure.account.key.hwxasvtesting.blob.core.windows.net": "R/1hsiE/qdHPZU9yfrSPlOcJ7AvPAtdsaNyRxaWC++NkU8jxHNC1m6ZsuOpRqyodiP/Fnn29NrI+/zZ4nEJN6A==", 
+                    "fs.defaultFS": "hdfs://mycluster", 
+                    "ha.failover-controller.active-standby-elector.zk.op.retries": "120", 
+                    "ha.zookeeper.quorum": "%HOSTGROUP::host_group_slave%:2181", 
+                    "hadoop.proxyuser.falcon.groups": "*", 
+                    "hadoop.proxyuser.falcon.hosts": "*", 
+                    "hadoop.proxyuser.hcat.groups": "*", 
+                    "hadoop.proxyuser.hcat.hosts": "%HOSTGROUP::host_group_master%,%HOSTGROUP::host_group_ha_master%", 
+                    "hadoop.proxyuser.hdfs.groups": "*", 
+                    "hadoop.proxyuser.hdfs.hosts": "*", 
+                    "hadoop.proxyuser.hive.groups": "*", 
+                    "hadoop.proxyuser.hive.hosts": "*", 
+                    "hadoop.proxyuser.oozie.groups": "*", 
+                    "hadoop.proxyuser.oozie.hosts": "*", 
+                    "io.compression.codec.lzo.class": "com.hadoop.compression.lzo.LzoCodec", 
+                    "io.compression.codecs": "org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.SnappyCodec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec", 
+                    "proxyuser_group": "users"
+                }
+            }
+        }, 
+        {
+            "yarn-env": {
+                "properties": {
+                    "yarn_log_dir_prefix": "/grid/0/log/yarn"
+                }
+            }
+        }, 
+        {
+            "infra-solr-client-log4j": {
+                "properties": {
+                    "infra_solr_client_log_dir": "/grid/0/log/ambari-infra-solr-client"
+                }
+            }
+        }, 
+        {
+            "yarn-hbase-env": {
+                "properties": {
+                    "yarn_hbase_log_level": "DEBUG"
+                }
+            }
+        }, 
+        {
+            "yarn-hbase-site": {
+                "properties": {
+                    "hbase.master.hfilecleaner.ttl": "604800000", 
+                    "hbase.master.logcleaner.ttl": "604800000", 
+                    "hbase.master.namespace.init.timeout": "86400000"
+                }
+            }
+        }, 
+        {
+            "hadoop-env": {
+                "properties": {
+                    "hdfs_log_dir_prefix": "/grid/0/log/hdfs", 
+                    "namenode_heapsize": "1500"
+                }
+            }
+        }, 
+        {
+            "application-properties": {
+                "properties": {
+                    "atlas.authorizer.impl": "ranger", 
+                    "atlas.graph.storage.hostname": "%HOSTGROUP::host_group_slave%:2181", 
+                    "atlas.rest.address": "http://%HOSTGROUP::host_group_master%:21000,http://%HOSTGROUP::host_group_ha_master%:21000"
+                }
+            }
+        }, 
+        {
+            "yarn-site": {
+                "properties": {
+                    "yarn.authorization-provider": "org.apache.ranger.authorization.yarn.authorizer.RangerYarnAuthorizer", 
+                    "yarn.http.policy": "HTTP_ONLY", 
+                    "yarn.log-aggregation-status.time-out.ms": "180000", 
+                    "yarn.nodemanager.address": "0.0.0.0:25454", 
+                    "yarn.nodemanager.delete.debug-delay-sec": "3600", 
+                    "yarn.nodemanager.local-dirs": "/grid/0/hadoop/yarn/local", 
+                    "yarn.nodemanager.log-dirs": "/grid/0/hadoop/yarn/log", 
+                    "yarn.nodemanager.recovery.enabled": "true", 
+                    "yarn.resourcemanager.address": "%HOSTGROUP::host_group_master%:8050", 
+                    "yarn.resourcemanager.admin.address": "%HOSTGROUP::host_group_master%:8141", 
+                    "yarn.resourcemanager.am.max-attempts": "20", 
+                    "yarn.resourcemanager.bind-host": "0.0.0.0", 
+                    "yarn.resourcemanager.cluster-id": "yarn-cluster", 
+                    "yarn.resourcemanager.ha.automatic-failover.zk-base-path": "/yarn-leader-election", 
+                    "yarn.resourcemanager.ha.enabled": "true", 
+                    "yarn.resourcemanager.ha.rm-ids": "rm1,rm2", 
+                    "yarn.resourcemanager.hostname": "%HOSTGROUP::host_group_master%", 
+                    "yarn.resourcemanager.hostname.rm1": "%HOSTGROUP::host_group_master%", 
+                    "yarn.resourcemanager.hostname.rm2": "%HOSTGROUP::host_group_ha_master%", 
+                    "yarn.resourcemanager.recovery.enabled": "true", 
+                    "yarn.resourcemanager.resource-tracker.address": "%HOSTGROUP::host_group_master%:8025", 
+                    "yarn.resourcemanager.resource-tracker.address.rm1": "%HOSTGROUP::host_group_master%:8025", 
+                    "yarn.resourcemanager.resource-tracker.address.rm2": "%HOSTGROUP::host_group_ha_master%:8025", 
+                    "yarn.resourcemanager.scheduler.address": "%HOSTGROUP::host_group_master%:8030", 
+                    "yarn.resourcemanager.scheduler.class": "org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler", 
+                    "yarn.resourcemanager.store.class": "org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore", 
+                    "yarn.resourcemanager.webapp.address": "%HOSTGROUP::host_group_master%:8088", 
+                    "yarn.resourcemanager.webapp.address.rm1": "%HOSTGROUP::host_group_master%:8088", 
+                    "yarn.resourcemanager.webapp.address.rm2": "%HOSTGROUP::host_group_ha_master%:8088", 
+                    "yarn.resourcemanager.webapp.https.address": "%HOSTGROUP::host_group_master%:8088", 
+                    "yarn.resourcemanager.work-preserving-recovery.enabled": "true", 
+                    "yarn.resourcemanager.zk-address": "%HOSTGROUP::host_group_slave%:2181", 
+                    "yarn.timeline-service.bind-host": "0.0.0.0", 
+                    "yarn.timeline-service.client.max-retries": "30", 
+                    "yarn.timeline-service.enabled": "true", 
+                    "yarn.timeline-service.leveldb-state-store.path": "/grid/0/hadoop/yarn/timeline", 
+                    "yarn.timeline-service.leveldb-timeline-store.path": "/grid/0/hadoop/yarn/timeline", 
+                    "yarn.timeline-service.leveldb-timeline-store.read-cache-size": "104857600", 
+                    "yarn.timeline-service.leveldb-timeline-store.start-time-read-cache-size": "10000"
+                }
+            }
+        }, 
+        {
+            "hive-env": {
+                "properties": {
+                    "hive_database": "Existing MySQL / MariaDB Database", 
+                    "hive_database_type": "{{database.dbflavour}}", 
+                    "hive_existing_mysql_database": "MySQL", 
+                    "hive_log_dir": "/grid/0/log/hive", 
+                    "hive_metastore_user_passwd": "password", 
+                    "hive_security_authorization": "Ranger"
+                }
+            }
+        }, 
+        {
+            "capacity-scheduler": {
+                "properties": {
+                    "yarn.scheduler.capacity.maximum-am-resource-percent": "0.4", 
+                    "yarn.scheduler.capacity.root.acl_submit_applications": "hive,zeppelin,hbase,ambari-qa users"
+                }
+            }
+        }, 
+        {
+            "ranger-hbase-plugin-properties": {
+                "properties": {
+                    "ranger-hbase-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "gateway-site": {
+                "properties": {
+                    "gateway.remote.config.monitor.client": "sandbox-zookeeper-client", 
+                    "gateway.remote.config.registry.sandbox-zookeeper-client": "type=ZooKeeper;address=%HOSTGROUP::host_group_slave%:2181"
+                }
+            }
+        }, 
+        {   {% raw %}
+            "hbase-env": {
+                "properties": {
+                    "content": "# Set environment variables here.\n\n# The java implementation to use. Java 1.6 required.\nexport JAVA_HOME={{java64_home}}\n\n# HBase Configuration directory\nexport HBASE_CONF_DIR=${HBASE_CONF_DIR:-{{hbase_conf_dir}}}\n\n# Extra Java CLASSPATH elements. Optional.\nexport HBASE_CLASSPATH=${HBASE_CLASSPATH}\n\n\n# The maximum amount of heap to use, in MB. Default is 1000.\n# export HBASE_HEAPSIZE=1000\n\n# Extra Java runtime options.\n# Below are what we set by default. May only work with SUN JVM.\n# For more on why as well as other possible settings,\n# see http://wiki.apache.org/hadoop/PerformanceTuning\nexport SERVER_GC_OPTS=\"-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:{{log_dir}}/gc.log-`date +'%Y%m%d%H%M'`\"\n# Uncomment below to enable java garbage collection logging.\n# export HBASE_OPTS=\"$HBASE_OPTS -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$HBASE_HOME/logs/gc-hbase.log\"\n\n# Uncomment and adjust to enable JMX exporting\n# See jmxremote.password and jmxremote.access in $JRE_HOME/lib/management to configure remote password access.\n# More details at: http://java.sun.com/javase/6/docs/technotes/guides/management/agent.html\n#\n# export HBASE_JMX_BASE=\"-Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false\"\n# If you want to configure BucketCache, specify '-XX: MaxDirectMemorySize=' with proper direct memory size\n# export HBASE_THRIFT_OPTS=\"$HBASE_JMX_BASE -Dcom.sun.management.jmxremote.port=10103\"\n# export HBASE_ZOOKEEPER_OPTS=\"$HBASE_JMX_BASE -Dcom.sun.management.jmxremote.port=10104\"\n\n# File naming hosts on which HRegionServers will run. $HBASE_HOME/conf/regionservers by default.\nexport HBASE_REGIONSERVERS=${HBASE_CONF_DIR}/regionservers\n\n# Extra ssh options. Empty by default.\n# export HBASE_SSH_OPTS=\"-o ConnectTimeout=1 -o SendEnv=HBASE_CONF_DIR\"\n\n# Where log files are stored. $HBASE_HOME/logs by default.\nexport HBASE_LOG_DIR={{log_dir}}\n\n# A string representing this instance of hbase. $USER by default.\n# export HBASE_IDENT_STRING=$USER\n\n# The scheduling priority for daemon processes. See 'man nice'.\n# export HBASE_NICENESS=10\n\n# The directory where pid files are stored. /tmp by default.\nexport HBASE_PID_DIR={{pid_dir}}\n\n# Seconds to sleep between slave commands. Unset by default. This\n# can be useful in large clusters, where, e.g., slave rsyncs can\n# otherwise arrive faster than the master can service them.\n# export HBASE_SLAVE_SLEEP=0.1\n\n# Tell HBase whether it should manage it's own instance of Zookeeper or not.\nexport HBASE_MANAGES_ZK=false\n\n{% if java_version < 8 %}\nJDK_DEPENDED_OPTS=\"-XX:PermSize=128m -XX:MaxPermSize=128m\"\n{% endif %}\n\n{% if security_enabled %}\nexport HBASE_OPTS=\"$HBASE_OPTS -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:-ResizePLAB -XX:ErrorFile={{log_dir}}/hs_err_pid%p.log -Djava.security.auth.login.config={{client_jaas_config_file}} -Djava.io.tmpdir={{java_io_tmpdir}}\"\nexport HBASE_MASTER_OPTS=\"$HBASE_MASTER_OPTS -Xmx{{master_heapsize}} -Djava.security.auth.login.config={{master_jaas_config_file}} -Djavax.security.auth.useSubjectCredsOnly=false $JDK_DEPENDED_OPTS\"\nexport HBASE_REGIONSERVER_OPTS=\"$HBASE_REGIONSERVER_OPTS -XX:ReservedCodeCacheSize=256m -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}} -Djava.security.auth.login.config={{regionserver_jaas_config_file}} -Djavax.security.auth.useSubjectCredsOnly=false $JDK_DEPENDED_OPTS\"\nexport PHOENIX_QUERYSERVER_OPTS=\"$PHOENIX_QUERYSERVER_OPTS -Djava.security.auth.login.config={{queryserver_jaas_config_file}}\"\n{% else %}\nexport HBASE_OPTS=\"$HBASE_OPTS -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:-ResizePLAB -XX:ErrorFile={{log_dir}}/hs_err_pid%p.log -Djava.io.tmpdir={{java_io_tmpdir}}\"\nexport HBASE_MASTER_OPTS=\"$HBASE_MASTER_OPTS -Xmx{{master_heapsize}} $JDK_DEPENDED_OPTS\"\nexport HBASE_REGIONSERVER_OPTS=\"$HBASE_REGIONSERVER_OPTS -XX:ReservedCodeCacheSize=256m -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}} $JDK_DEPENDED_OPTS\"\n{% endif %}\n\n# HBase off-heap MaxDirectMemorySize\nexport HBASE_REGIONSERVER_OPTS=\"$HBASE_REGIONSERVER_OPTS {% if hbase_max_direct_memory_size %} -XX:MaxDirectMemorySize={{hbase_max_direct_memory_size}}m {% endif %}\"\nexport HBASE_MASTER_OPTS=\"$HBASE_MASTER_OPTS {% if hbase_max_direct_memory_size %} -XX:MaxDirectMemorySize={{hbase_max_direct_memory_size}}m {% endif %}\"", 
+                    "hbase_java_io_tmpdir": "/grid/0/hbase-tmp", 
+                    "hbase_log_dir": "/grid/0/log/hbase"
+                }
+            }
+            {% endraw %}
+        }, 
+        {
+            "krb5-conf": {
+                "properties": {
+                    "domains": "hwx.site,.hwx.site", 
+                    "manage_krb5_conf": "true"
+                }
+            }
+        }, 
+        {
+            "kafka-env": {
+                "properties": {
+                    "kafka_log_dir": "/grid/0/log/kafka"
+                }
+            }
+        }, 
+        {
+            "atlas-env": {
+                "properties": {
+                    "atlas.admin.password": "admin123", 
+                    "atlas.admin.username": "admin", 
+                    "metadata_log_dir": "/grid/0/log/atlas"
+                }
+            }
+        }, 
+        {
+            "zoo.cfg": {
+                "properties": {
+                    "dataDir": "/grid/0/hadoop/zookeeper", 
+                    "tickTime": "4500"
+                }
+            }
+        }, 
+        {
+            "hiveserver2-site": {
+                "properties": {
+                    "hive.conf.restricted.list": "hive.security.authorization.enabled,hive.security.authorization.manager,hive.security.authenticator.manager", 
+                    "hive.security.authenticator.manager": "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator", 
+                    "hive.security.authorization.enabled": "true", 
+                    "hive.security.authorization.manager": "org.apache.ranger.authorization.hive.authorizer.RangerHiveAuthorizerFactory"
+                }
+            }
+        }, 
+        {
+            "zookeeper-env": {
+                "properties": {
+                    "zk_log_dir": "/grid/0/log/zookeeper"
+                }
+            }
+        }, 
+        {
+            "cluster-env": {
+                "properties": {
+                    "command_retry_max_time_in_sec": "1800", 
+                    "commands_to_retry": "START", 
+                    "sysprep_skip_create_users_and_groups": "false"
+                }
+            }
+        }
+    ], 
+    "host_groups": [
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "NAMENODE"
+                }, 
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "JOURNALNODE"
+                }, 
+                {
+                    "name": "HISTORYSERVER"
+                }, 
+                {
+                    "name": "YARN_REGISTRY_DNS"
+                }, 
+                {
+                    "name": "RESOURCEMANAGER"
+                }, 
+                {
+                    "name": "TIMELINE_READER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "APP_TIMELINE_SERVER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "ZKFC"
+                }, 
+                {
+                    "name": "INFRA_SOLR_CLIENT", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "INFRA_SOLR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_GRAFANA", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_COLLECTOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "ATLAS_CLIENT"
+                }, 
+                {
+                    "name": "ATLAS_SERVER"
+                }, 
+                {
+                    "name": "HBASE_MASTER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "HBASE_REGIONSERVER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "HIVE_SERVER"
+                }, 
+                {
+                    "name": "HIVE_METASTORE"
+                }, 
+                {
+                    "name": "HIVE_CLIENT"
+                }, 
+                {
+                    "name": "KNOX_GATEWAY"
+                }, 
+                {
+                    "name": "LIVY2_SERVER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "RANGER_TAGSYNC", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "RANGER_ADMIN", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "RANGER_USERSYNC", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "SPARK2_THRIFTSERVER"
+                }, 
+                {
+                    "name": "SPARK2_JOBHISTORYSERVER"
+                }, 
+                {
+                    "name": "TEZ_CLIENT"
+                }
+            ], 
+            "name": "host_group_master"
+        }, 
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "HDFS_CLIENT"
+                }, 
+                {
+                    "name": "JOURNALNODE"
+                }, 
+                {
+                    "name": "MAPREDUCE2_CLIENT"
+                }, 
+                {
+                    "name": "YARN_CLIENT"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "INFRA_SOLR_CLIENT", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "ATLAS_CLIENT"
+                }, 
+                {
+                    "name": "HBASE_CLIENT", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "HBASE_REGIONSERVER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "HIVE_CLIENT"
+                }, 
+                {
+                    "name": "KAFKA_BROKER"
+                }, 
+                {
+                    "name": "NFS_GATEWAY"
+                }, 
+                {
+                    "name": "SPARK2_CLIENT"
+                }, 
+                {
+                    "name": "TEZ_CLIENT"
+                }, 
+                {
+                    "name": "KERBEROS_CLIENT"
+                }
+            ], 
+            "name": "host_group_gateway"
+        }, 
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "NAMENODE"
+                }, 
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "JOURNALNODE"
+                }, 
+                {
+                    "name": "RESOURCEMANAGER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "ZKFC"
+                }, 
+                {
+                    "name": "INFRA_SOLR_CLIENT", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "ATLAS_CLIENT"
+                }, 
+                {
+                    "name": "ATLAS_SERVER"
+                }, 
+                {
+                    "name": "HBASE_MASTER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "HIVE_SERVER"
+                }, 
+                {
+                    "name": "HIVE_METASTORE"
+                }, 
+                {
+                    "name": "HIVE_CLIENT"
+                }, 
+                {
+                    "name": "KNOX_GATEWAY"
+                }, 
+                {
+                    "name": "RANGER_ADMIN", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "TEZ_CLIENT"
+                }
+            ], 
+            "name": "host_group_ha_master"
+        }, 
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "NODEMANAGER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_SERVER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "ATLAS_CLIENT"
+                }, 
+                {
+                    "name": "HBASE_REGIONSERVER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "HIVE_CLIENT"
+                }, 
+                {
+                    "name": "KAFKA_BROKER"
+                }, 
+                {
+                    "name": "TEZ_CLIENT"
+                }
+            ], 
+            "name": "host_group_slave"
+        }
+    ]
+}
