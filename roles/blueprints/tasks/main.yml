@@ -3,4 +3,8 @@
     src: templates/{{blueprint.location}}/blueprint.json.j2
     dest: /root/blueprint.json
     mode: 0755
+- template: 
+    src: templates/{{blueprint.location}}/template.json.j2
+    dest: /root/template.json
+    mode: 0755
 ...
