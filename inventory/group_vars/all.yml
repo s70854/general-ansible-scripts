@@ -1,5 +1,7 @@
 ---
 # release related configurations
+# for public repos you can get version info from http://public-repo-1.hortonworks.com/HDF/hdf_urlinfo.json / http://public-repo-1.hortonworks.com/HDP/hdp_urlinfo.json
+# eg:  "HDF-3.3"["manifests"]["3.0.1.0"]["centos-ppc7"]
 release:
         ambari: 
             url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.3.0-90/ambaribn.repo
@@ -10,7 +12,7 @@ release:
             purge: no 
             version: 3.2.0.0-520
         hdp:
-            version: 3.2.0.0-520
+            version: 3.0.1.0-187
 
 
 blueprint:

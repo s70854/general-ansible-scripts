@@ -7,4 +7,32 @@
     src: templates/{{blueprint.location}}/template.json.j2
     dest: /root/template.json
     mode: 0755
+- name: Download ambari.repo on agent nodes
+  get_url:
+    url: "{{release.ambari.url}}"
+    dest: /etc/yum.repos.d/ambari.repo
+    force: yes
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['gateway']|union(groups['agent'])}}"     
+- name: Install ambari agents
+  yum: name="ambari-agent" state=latest update_cache=yes
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['gateway']|union(groups['agent'])}}"
+  when: ansible_facts['os_family'] == "RedHat"    
+- name: register ambari-agents  
+  replace:
+    path: /etc/ambari-agent/conf/ambari-agent.ini
+    regexp: 'hostname=localhost'
+    replace: "hostname={{hostvars[groups['gateway'][0]].ansible_fqdn}}"
+    backup: yes
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['gateway']|union(groups['agent'])}}"
+- name: start the ambari-agents
+  command: ambari-agent restart    
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['gateway']|union(groups['agent'])}}"  
 ...
