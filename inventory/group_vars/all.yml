@@ -4,7 +4,7 @@
 # eg:  "HDF-3.3"["manifests"]["3.0.1.0"]["centos-ppc7"]
 release:
         ambari: 
-            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.3.0-90/ambaribn.repo
+            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7-ppc/2.x/BUILDS/2.7.3.0-90/ambaribn.repo
         hdf:
             url:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/hdf.repo
             mpack:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.2.0.0-520.tar.gz
@@ -12,6 +12,7 @@ release:
             purge: no 
             version: 3.2.0.0-520
         hdp:
+            url:  http://public-repo-1.hortonworks.com/HDP/centos7-ppc/3.x/updates/3.0.1.0/hdp.repo
             version: 3.0.1.0-187
 
 

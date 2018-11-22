@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+  - setup:
+- name: deploy the blueprint
+  hosts: gateway
+  roles:
+  - role: roles/blueprints

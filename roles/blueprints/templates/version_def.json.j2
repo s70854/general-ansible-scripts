@@ -1,0 +1,9 @@
+{
+  "VersionDefinition": {
+    {% if  release.hdf.install == "yes" and release.hdf.purge == "yes" %}
+    "version_url": "{{release.hdf.url|regex_replace('^(.*)/.*$','\\1')}}/HDF-{{release.hdf.version}}.xml"
+    {% else %}
+    "version_url": "{{release.hdp.url|regex_replace('^(.*)/.*$','\\1')}}/HDP-{{release.hdp.version}}.xml"
+    {% endif %}
+  }
+}
