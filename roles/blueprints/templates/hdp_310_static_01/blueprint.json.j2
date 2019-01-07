@@ -6,15 +6,6 @@
     }, 
     "configurations": [
         {
-            "ranger-knox-plugin-properties": {
-                "properties": {
-                    "XAAUDIT.DB.IS_ENABLED": "false", 
-                    "common.name.for.certificate": "", 
-                    "ranger-knox-plugin-enabled": "Yes"
-                }
-            }
-        }, 
-        {
             "mapred-site": {
                 "properties": {
                     "mapreduce.am.max-attempts": "20"
@@ -36,7 +27,7 @@
                 "properties": {
                     "ranger.audit.source.type": "solr", 
                     "ranger.jpa.jdbc.driver": "com.mysql.jdbc.Driver", 
-                    "ranger.jpa.jdbc.url": "jdbc:{{database.dbflavour}}://{{hostvars[groups['db'][0]].ansible_fqdn}}/{{database.users.rangerdba.name}}"
+                    "ranger.jpa.jdbc.url": "jdbc:{{database.dbflavour}}://{{hostvars[groups['db'][0]].ansible_fqdn}}/ranger"
                 }
             }
         }, 
@@ -53,7 +44,6 @@
                     "ranger-hdfs-plugin-enabled": "Yes", 
                     "ranger-hive-plugin-enabled": "Yes", 
                     "ranger-kafka-plugin-enabled": "Yes", 
-                    "ranger-knox-plugin-enabled": "Yes", 
                     "ranger-storm-plugin-enabled": "Yes", 
                     "ranger-yarn-plugin-enabled": "Yes", 
                     "ranger_admin_password": "Rangerpassword@123", 
@@ -116,10 +106,10 @@
                     "audit_db_user": "rangerlogger", 
                     "db_host": "{{hostvars[groups['db'][0]].ansible_fqdn}}", 
                     "db_name": "ranger", 
-                    "db_password": "rangeradmin", 
+                    "db_password": "{{database.users.ranger.pswd}}", 
                     "db_root_password": "{{database.dba.pswd}}", 
                     "db_root_user": "{{database.dba.name}}", 
-                    "db_user": "rangeradmin", 
+                    "db_user": "{{database.users.ranger.name}}", 
                     "policymgr_external_url": "http://%HOSTGROUP::host_group_master%:6080"
                 }
             }
@@ -239,9 +229,9 @@
                     "hive.tez.container.size": "4096", 
                     "hive.tez.java.opts": "-server -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseG1GC -XX:+ResizeTLAB -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps", 
                     "javax.jdo.option.ConnectionDriverName": "com.{{database.dbflavour}}.jdbc.Driver", 
-                    "javax.jdo.option.ConnectionPassword": "password", 
-                    "javax.jdo.option.ConnectionURL": "jdbc:{{database.dbflavour}}://{{hostvars[groups['kdc'][0]].ansible_fqdn}}/hivedb?createDatabaseIfNotExist=true", 
-                    "javax.jdo.option.ConnectionUserName": "hiveuser"
+                    "javax.jdo.option.ConnectionPassword": "{{database.users.hivedb.pswd}}", 
+                    "javax.jdo.option.ConnectionURL": "jdbc:{{database.dbflavour}}://{{hostvars[groups['db'][0]].ansible_fqdn}}/hivedb?createDatabaseIfNotExist=true", 
+                    "javax.jdo.option.ConnectionUserName": "{{database.users.hivedb.name}}"
                 }
             }
         }, 
@@ -267,13 +257,6 @@
                     "common.name.for.certificate": "-", 
                     "policy_user": "ambari-qa", 
                     "ranger-hdfs-plugin-enabled": "Yes"
-                }
-            }
-        }, 
-        {
-            "knox-env": {
-                "properties": {
-                    "knox_master_secret": "knoxsecret"
                 }
             }
         }, 
@@ -575,9 +558,6 @@
                     "name": "HIVE_CLIENT"
                 }, 
                 {
-                    "name": "KNOX_GATEWAY"
-                }, 
-                {
                     "name": "LIVY2_SERVER", 
                     "provision_action": "INSTALL_AND_START"
                 }, 
@@ -650,9 +630,6 @@
                 }, 
                 {
                     "name": "KAFKA_BROKER"
-                }, 
-                {
-                    "name": "NFS_GATEWAY"
                 }, 
                 {
                     "name": "SPARK2_CLIENT"

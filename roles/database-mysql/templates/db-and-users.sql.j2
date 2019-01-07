@@ -8,11 +8,11 @@ commit;
 CREATE USER '{{database.dba.name}}'@'%' IDENTIFIED BY '{{database.dba.pswd}}';
 grant all privileges on *.* to '{{database.dba.name}}'@'%' identified by '{{database.dba.pswd}}' with grant option;
 
-{% for user, db in database.users.items() %}
-CREATE DATABASE `{{db.name}}` /*!40100 DEFAULT CHARACTER SET utf8 */;
+{% for db, user in database.users.items() %}
+CREATE DATABASE `{{db}}` /*!40100 DEFAULT CHARACTER SET utf8 */;
 {% for host in ['%',inventory_hostname,'localhost','127.0.0.1','::1'] %}
-CREATE USER '{{db.name}}'@'{{host}}' IDENTIFIED BY '{{db.pswd}}';
-GRANT ALL PRIVILEGES ON *.* TO '{{db.name}}'@'{{host}}';
+CREATE USER '{{user.name}}'@'{{host}}' IDENTIFIED BY '{{user.pswd}}';
+GRANT ALL PRIVILEGES ON *.* TO '{{user.name}}'@'{{host}}';
 {% endfor %}
 {% endfor %}
 commit;
