@@ -1,23 +1,23 @@
 ---
 # release related configurations
 # for public repos you can get version info from http://public-repo-1.hortonworks.com/HDF/hdf_urlinfo.json / http://public-repo-1.hortonworks.com/HDP/hdp_urlinfo.json
-# eg:  "HDF-3.3"["manifests"]["3.0.1.0"]["centos-ppc7"]
+# eg:  "HDF-3.3"["manifests"]["3.0.1.0"]["centos-ppc7"]  ->   3.3.1.0-10 (just version, HDP/HDF should be dropped)
 release:
         ambari: 
-            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7-ppc/2.x/BUILDS/2.7.3.0-90/ambaribn.repo
+            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.3.0-138/ambaribn.repo
         hdf:
-            url:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/hdf.repo
-            mpack:  http://public-repo-1.hortonworks.com/HDF/centos7-ppc/3.x/updates/3.2.0.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.2.0.0-520.tar.gz
-            install: no 
+            url:  http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.3.1.0/hdf.repo
+            mpack: http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.3.1.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.1.0-10.tar.gz
+            install: yes 
             purge: no 
-            version: 3.2.0.0-520
+            version: 3.3.1.0-10
         hdp:
-            url:  http://public-repo-1.hortonworks.com/HDP/centos7-ppc/3.x/updates/3.0.1.0/hdp.repo
-            version: 3.0.1.0-187
+            url:  http://public-repo-1.hortonworks.com/HDP/centos7/3.x/updates/3.1.0.0/hdp.repo
+            version: 3.1.0.0-78
 
 
 blueprint:
-    location: hdp_303_static_01
+    location: hdp_310_static_01
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
 # ycloud java_home:  /usr/lib/jvm/java-1.8.0-openjdk

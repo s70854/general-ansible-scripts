@@ -7,7 +7,6 @@
 3, setup mysql databases
 4, setup kdc
 5, install ambari-server
-
 ========[ 7 minuites so far]
 
 6, ? deploy blueprints

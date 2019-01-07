@@ -48,7 +48,26 @@
     mode: 0755
 - name:  update host mapping in all the nodes
   shell:  cat /root/hosts >> /etc/hosts
-    
+
+- name: Install a kdc client binaries
+  yum: name="{{ item }}" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"
+  loop: 
+#    - krb5-auth-dialog
+    - krb5-libs
+    - krb5-workstation    
+
+- name: provide log directory permissions for all
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: 0777
+    recurse: yes
+  loop: 
+    - /var/log
+    - /grid/0/log
+
+  
 #- name: disable service firewalld 
 #  systemd:
 #    name: firewalld

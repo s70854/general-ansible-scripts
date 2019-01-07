@@ -6,10 +6,15 @@
     - krb5-server
     - krb5-libs
     - krb5-workstation
+
 - template: 
     src: templates/krb5.conf.j2
     dest: /etc/krb5.conf
     mode: 0755
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['gateway']|union(groups['agent'])|union(groups['kdc'])}}"
+
 - stat: path=/var/kerberos/krb5kdc/principal    
   register: kdc_db
 - name: Create kerberos database

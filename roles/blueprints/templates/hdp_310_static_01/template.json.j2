@@ -42,14 +42,14 @@
         {
             "hosts": [
                 {
-                    "fqdn": "{{hostvars[groups['gateway'][0]].ansible_fqdn}}"
+                    "fqdn": "{{hostvars[groups['agent'][1]].ansible_fqdn}}"
                 }
             ], 
             "name": "host_group_ha_master"
         },
         {
             "hosts": [
-            {% for host in groups['agent'] %}
+            {% for host in groups['agent'][2:] %}
                 {
                     "fqdn": "{{ hostvars[host].ansible_fqdn }}"
                 }{% if not loop.last %},{% endif %} 
@@ -71,7 +71,7 @@
                     "name": "smokeuser", 
                     "principal": {
                         "type": "user", 
-                        "value": "${cluster-env/smokeuser}@${{kerberos.realm}}"
+                        "value": "${cluster-env/smokeuser}@{{kerberos.realm}}"
                     }
                 }, 
                 {
