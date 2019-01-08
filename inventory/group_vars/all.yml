@@ -15,9 +15,17 @@ release:
             url:  http://public-repo-1.hortonworks.com/HDP/centos7/3.x/updates/3.1.0.0/hdp.repo
             version: 3.1.0.0-78
 
+# cluster properties            
+cluster:
+    name: cl1
+    security:
+        kerberos: yes
+        ssl: yes
 
+# blueprint configurations
 blueprint:
     location: hdp_310_static_01
+
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
 # ycloud java_home:  /usr/lib/jvm/java-1.8.0-openjdk
@@ -56,7 +64,7 @@ database:
 
 
 
-# security-kerberos configurations
+# security-kerberos configurations, effective if cluster.security.kerberos = yes
 kerberos:
     enable: yes
     realm: HDF.COM
