@@ -41,7 +41,7 @@ database:
              registry:
                    name: registry
                    pswd: registry
-             rangerdba:
+             ranger:
                    name: rangerdba
                    pswd: rangerdba
              druid:
@@ -50,6 +50,9 @@ database:
              superset:
                    name: superset
                    pswd: superset
+             hivedb:       
+                   name: hive
+                   pswd: hive
 
 
 
