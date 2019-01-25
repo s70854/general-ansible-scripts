@@ -83,4 +83,16 @@ kerberos:
     realm: HDF.COM
     db_master_key: passW0rd
     admin_princ_pswd: passW0rd
+
+ssl:
+    storepswd: passW0rd
+    keypswd: passW0rd
+    directory: 
+      ca: /grid/0/kafka-security/ca
+      store: /grid/0/kafka-security/store
+      group: hadoop
+      user: kafka 
+    ca:
+      name: QA-Security-CA
+      
 ...
