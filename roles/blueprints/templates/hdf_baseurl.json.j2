@@ -1,0 +1,95 @@
+{
+  "RepositoryVersions" : {
+    "id" : 1,
+    "stack_name" : "HDP",
+    "stack_version" : "{{release.hdp.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}"
+  },
+  "operating_systems" : [
+    {
+      "OperatingSystems" : {
+        "os_type" : "{{cluster.os}}"
+      },
+      "repositories" : [
+        {
+          "Repositories" : {
+            "applicable_services" : [
+              "STREAMLINE",
+              "NIFI",
+              "NIFI_REGISTRY",
+              "REGISTRY"
+            ],
+            "base_url" : "{{release.hdf.url|regex_replace('^(.*)/.*$','\\1')}}",
+            "components" : null,
+            "default_base_url" : "",
+            "distribution" : null,
+            "mirrors_list" : "",
+            "os_type" : "{{cluster.os}}",
+            "repo_id" : "HDF-{{release.hdf.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}",
+            "repo_name" : "HDF",
+            "repository_version_id" : 1,
+            "stack_name" : "HDP",
+            "stack_version" : "{{release.hdp.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}",
+            "tags" : [ ],
+            "unique" : false
+          }
+        },
+        {
+          "Repositories" : {
+            "applicable_services" : [ ],
+            "base_url" : "{{release.hdp.url|regex_replace('^(.*)/.*$','\\1')}}",
+            "components" : null,
+            "default_base_url" : "",
+            "distribution" : null,
+            "mirrors_list" : "",
+            "os_type" : "{{cluster.os}}",
+            "repo_id" : "HDP-{{release.hdp.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}",
+            "repo_name" : "HDP",
+            "repository_version_id" : 1,
+            "stack_name" : "HDP",
+            "stack_version" : "{{release.hdp.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}",
+            "tags" : [ ],
+            "unique" : false
+          }
+        },
+        {
+          "Repositories" : {
+            "applicable_services" : [ ],
+            "base_url" : "{{release.hdp_gpl.base_url}}",
+            "components" : null,
+            "default_base_url" : "",
+            "distribution" : null,
+            "mirrors_list" : "",
+            "os_type" : "{{cluster.os}}",
+            "repo_id" : "{{release.hdp_gpl.version}}",
+            "repo_name" : "HDP-GPL",
+            "repository_version_id" : 1,
+            "stack_name" : "HDP",
+            "stack_version" : "{{release.hdp.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}",
+            "tags" : [
+              "GPL"
+            ],
+            "unique" : false
+          }
+        },
+        {
+          "Repositories" : {
+            "applicable_services" : [ ],
+            "base_url" : "{{release.hdp_utils.base_url}}",
+            "components" : null,
+            "default_base_url" : "",
+            "distribution" : null,
+            "mirrors_list" : "",
+            "os_type" : "{{cluster.os}}",
+            "repo_id" : "{{release.hdp_utils.version}}",
+            "repo_name" : "HDP-UTILS",
+            "repository_version_id" : 1,
+            "stack_name" : "HDP",
+            "stack_version" : "{{release.hdp.version|regex_replace('^(\\d\\.\\d).*$','\\1')}}",
+            "tags" : [ ],
+            "unique" : false
+          }
+        }
+      ]
+    }
+  ]
+}

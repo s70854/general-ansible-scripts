@@ -1,0 +1,117 @@
+{
+    "blueprint": "blueprint-def", 
+    "config_recommendation_strategy": "ALWAYS_APPLY_DONT_OVERRIDE_CUSTOM_VALUES", 
+    "credentials": [
+        {
+            "alias": "kdc.admin.credential", 
+            "key": "Hortonworks", 
+            "principal": "admin/admin@HDF.COM", 
+            "type": "TEMPORARY"
+        }
+    ], 
+    "default_password": "password", 
+    "host_groups": [
+        {
+            "hosts": [
+                {
+                    "fqdn": "nat-r7-cuus-nifi-hdp-intg-re-5.openstacklocal"
+                }
+            ], 
+            "name": "host_group_gateway"
+        }, 
+        {
+            "hosts": [
+                {
+                    "fqdn": "nat-r7-cuus-nifi-hdp-intg-re-3.openstacklocal"
+                }
+            ], 
+            "name": "host_group_master"
+        }, 
+        {
+            "hosts": [
+                {
+                    "fqdn": "nat-r7-cuus-nifi-hdp-intg-re-4.openstacklocal"
+                }, 
+                {
+                    "fqdn": "nat-r7-cuus-nifi-hdp-intg-re-1.openstacklocal"
+                }, 
+                {
+                    "fqdn": "nat-r7-cuus-nifi-hdp-intg-re-2.openstacklocal"
+                }
+            ], 
+            "name": "host_group_slave"
+        }
+    ], 
+    "provision_action": "START_ONLY", 
+    "repository_version": "3.1.0.0-78", 
+    "security": {
+        "kerberos_descriptor": {
+            "identities": [
+                {
+                    "name": "smokeuser", 
+                    "principal": {
+                        "type": "user", 
+                        "value": "${cluster-env/smokeuser}@${realm}"
+                    }
+                }, 
+                {
+                    "name": "ambari-server", 
+                    "principal": {
+                        "type": "user", 
+                        "value": "ambari-server@${realm}"
+                    }
+                }
+            ], 
+            "properties": {
+                "principal_suffix": ""
+            }, 
+            "services": [
+                {
+                    "components": [], 
+                    "identities": [
+                        {
+                            "name": "smokeuser", 
+                            "principal": {
+                                "type": "user", 
+                                "value": "smokeuserrandRCvobZnYVBDNmG@${realm}"
+                            }
+                        }
+                    ], 
+                    "name": "nifi"
+                }, 
+                {
+                    "components": [
+                        {
+                            "identities": [
+                                {
+                                    "name": "hdfs", 
+                                    "principal": {
+                                        "type": "user", 
+                                        "value": "${hadoop-env/hdfs_user}@${realm}"
+                                    }
+                                }
+                            ], 
+                            "name": "NAMENODE"
+                        }
+                    ], 
+                    "identities": [], 
+                    "name": "HDFS"
+                }, 
+                {
+                    "components": [], 
+                    "identities": [
+                        {
+                            "name": "smokeuser", 
+                            "principal": {
+                                "type": "user", 
+                                "value": "smokeuserrandRGZyudkrRkbgfl@${realm}"
+                            }
+                        }
+                    ], 
+                    "name": "registry"
+                }
+            ]
+        }, 
+        "type": "KERBEROS"
+    }
+}

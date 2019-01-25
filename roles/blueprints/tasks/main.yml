@@ -3,10 +3,24 @@
     src: templates/{{blueprint.location}}/blueprint.json.j2
     dest: /root/blueprint.json
     mode: 0755
+  tags:
+  - printonly     
 - template: 
     src: templates/{{blueprint.location}}/template.json.j2
     dest: /root/template.json
     mode: 0755
+  tags:
+  - printonly     
+- template: 
+    src: "templates/{{item}}"
+    dest: "/root/{{item}}.json"
+    mode: 0755
+  loop:
+    - hdf_baseurl.json.j2
+    - repo.json.j2
+    - version_def.json.j2
+  tags:
+  - printonly     
 - name: Download ambari.repo on agent nodes
   get_url:
     url: "{{release.ambari.url}}"
@@ -35,6 +49,7 @@
   delegate_to: "{{item}}"
   delegate_facts: True
   loop: "{{groups['gateway']|union(groups['agent'])}}"  
+
 - name: VDF registration
   uri:
     url: "http://{{groups['gateway'][0]}}:8080/api/v1/version_definitions"
@@ -47,6 +62,44 @@
     body: "{{ lookup('template','templates/version_def.json.j2') | to_json }}" 
     force_basic_auth: yes
     status_code: 201  
+  tags:
+  - registerVdf      
+  
+- name: Register the stack version
+  uri:
+    url: "http://{{groups['gateway'][0]}}:8080/api/v1/stacks/HDP/versions/{{release.hdp.version|regex_replace('^([0-9]\\.[0-9]).*$','\\1')}}/operating_systems/{{cluster.os}}/repositories/HDP-{{release.hdp.version|regex_replace('^([0-9]\\.[0-9]).*$','\\1')}}"
+    method: PUT
+    headers:
+      X-Requested-By: ambari
+    user: admin
+    password: admin
+    body_format: raw
+    body: "{{ lookup('template','templates/repo.json.j2') | to_json }}" 
+    force_basic_auth: yes
+    status_code: 200,201  
+  when: release.hdf.install  and not release.hdf.purge
+  tags:
+  - registgerStackVersion  
+
+
+- name: Update the repositories for HDF baseurl
+  uri:
+    url: "http://{{groups['gateway'][0]}}:8080/api/v1/stacks/HDP/versions/{{release.hdp.version|regex_replace('^([0-9]\\.[0-9]).*$','\\1')}}/repository_versions/1"
+    method: PUT
+    headers:
+      X-Requested-By: ambari
+    user: admin
+    password: admin
+    body_format: raw
+    body: "{{ lookup('template','templates/hdf_baseurl.json.j2') | to_json }}" 
+    force_basic_auth: yes
+    status_code: 200,201  
+  when: release.hdf.install  and not release.hdf.purge
+  tags:
+  - updateBaseUrl  
+
+# verify the VDF registration using GET: http://172.27.11.192:8080/api/v1/stacks/HDP/versions/3.1/repository_versions/1?fields=operating_systems/repositories/Repositories&minimal_response=true
+
 
 - name: register the blueprint
   uri:
@@ -60,6 +113,8 @@
     body: "{{ lookup('template','templates/' + blueprint.location + '/blueprint.json.j2') | to_json }}" 
     force_basic_auth: yes
     status_code: 201  
+  tags:
+  - registerBp     
 - name: deploy the blueprint
   uri:
     url: "http://{{groups['gateway'][0]}}:8080/api/v1/clusters/{{cluster.name}}"
@@ -73,6 +128,6 @@
     force_basic_auth: yes
     status_code: 202,201  
   tags:
-  - justThis    
+  - deploy    
   
 ...

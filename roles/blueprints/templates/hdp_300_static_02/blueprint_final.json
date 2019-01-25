@@ -1,0 +1,661 @@
+{
+    "Blueprints": {
+        "blueprint_name": "blueprint-def", 
+        "stack_name": "HDP", 
+        "stack_version": "3.1"
+    }, 
+    "configurations": [
+        {
+            "ranger-kms-site": {
+                "properties": {
+                    "ranger.https.attrib.keystore.file": "/etc/security/serverKeys/ranger-kms-keystore.jks", 
+                    "ranger.service.https.attrib.client.auth": "want", 
+                    "ranger.service.https.attrib.clientAuth": "want", 
+                    "ranger.service.https.attrib.keystore.file": "/etc/security/serverKeys/ranger-kms-keystore.jks", 
+                    "ranger.service.https.attrib.keystore.keyalias": "rangerkms", 
+                    "ranger.service.https.attrib.keystore.pass": "rangerkms", 
+                    "ranger.service.https.attrib.ssl.enabled": "true", 
+                    "ranger.service.https.port": "9393"
+                }
+            }
+        }, 
+        {
+            "ranger-knox-plugin-properties": {
+                "properties": {
+                    "XAAUDIT.DB.IS_ENABLED": "false", 
+                    "common.name.for.certificate": "", 
+                    "ranger-knox-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "mapred-site": {
+                "properties": {
+                    "mapreduce.jobhistory.http.policy": "HTTPS_ONLY", 
+                    "mapreduce.jobhistory.webapp.https.address": "nat-r7-cuus-nifi-hdp-intg-re-3.openstacklocal:19888"
+                }
+            }
+        }, 
+        {
+            "ranger-nifi-policymgr-ssl": {
+                "properties": {
+                    "xasecure.policymgr.clientssl.keystore": "/etc/security/serverKeys/ranger-plugin-keystore.jks", 
+                    "xasecure.policymgr.clientssl.keystore.password": "myKeyFilePassword", 
+                    "xasecure.policymgr.clientssl.truststore": "/etc/security/serverKeys/ranger-plugin-truststore.jks", 
+                    "xasecure.policymgr.clientssl.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "ssl-client": {
+                "properties": {
+                    "ssl.client.keystore.location": "/etc/security/serverKeys/keystore.jks", 
+                    "ssl.client.keystore.password": "serverStorePassPassword", 
+                    "ssl.client.keystore.type": "jks", 
+                    "ssl.client.truststore.location": "/etc/security/clientKeys/all.jks", 
+                    "ssl.client.truststore.password": "clientTrustStorePassword", 
+                    "ssl.client.truststore.type": "jks"
+                }
+            }
+        }, 
+        {
+            "ranger-yarn-plugin-properties": {
+                "properties": {
+                    "REPOSITORY_CONFIG_USERNAME": "yarn", 
+                    "common.name.for.certificate": "-", 
+                    "policy_user": "ambari-qa", 
+                    "ranger-yarn-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "ranger-admin-site": {
+                "properties": {
+                    "ranger.audit.source.type": "solr", 
+                    "ranger.externalurl": "https://%HOSTGROUP::host_group_master%:6182", 
+                    "ranger.https.attrib.keystore.file": "/etc/security/serverKeys/ranger-admin-keystore.jks", 
+                    "ranger.jpa.jdbc.driver": "com.mysql.jdbc.Driver", 
+                    "ranger.jpa.jdbc.url": "jdbc:mysql://nat-r7-cuus-nifi-hdp-intg-re-2.openstacklocal/ranger", 
+                    "ranger.service.http.enabled": "false", 
+                    "ranger.service.https.attrib.client.auth": "want", 
+                    "ranger.service.https.attrib.clientAuth": "want", 
+                    "ranger.service.https.attrib.keystore.file": "/etc/security/serverKeys/ranger-admin-keystore.jks", 
+                    "ranger.service.https.attrib.keystore.keyalias": "rangeradmin", 
+                    "ranger.service.https.attrib.keystore.pass": "xasecure", 
+                    "ranger.service.https.attrib.ssl.enabled": "true", 
+                    "ranger.truststore.file": "/usr/lib/jvm/java-openjdk/jre/lib/security/cacerts", 
+                    "ranger.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "ranger-nifi-plugin-properties": {
+                "properties": {
+                    "ranger-nifi-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "registry-common": {
+                "properties": {
+                    "adminPort": "7789", 
+                    "jar.storage": "/grid/0/hdf/registry/jar", 
+                    "jar.storage.type": "local", 
+                    "port": "7788", 
+                    "registry.kerberos.non-browser.user-agents": "", 
+                    "registry.storage.connector.connectURI": "jdbc:mysql://nat-r7-cuus-nifi-hdp-intg-re-2.openstacklocal/registry", 
+                    "registry.storage.connector.password": "registry", 
+                    "registry.storage.type": "mysql"
+                }
+            }
+        }, 
+        {
+            "ranger-env": {
+                "properties": {
+                    "admin_password": "Rangerpassword@123", 
+                    "is_external_solrCloud_enabled": "false", 
+                    "is_external_solrCloud_kerberos": "false", 
+                    "is_solrCloud_enabled": "false", 
+                    "keyadmin_user_password": "Rangerpassword@123", 
+                    "ranger-atlas-plugin-enabled": "Yes", 
+                    "ranger-hbase-plugin-enabled": "Yes", 
+                    "ranger-hdfs-plugin-enabled": "Yes", 
+                    "ranger-hive-plugin-enabled": "Yes", 
+                    "ranger-kafka-plugin-enabled": "Yes", 
+                    "ranger-knox-plugin-enabled": "Yes", 
+                    "ranger-storm-plugin-enabled": "Yes", 
+                    "ranger-yarn-plugin-enabled": "Yes", 
+                    "ranger_admin_password": "Rangerpassword@123", 
+                    "ranger_privelege_user_jdbc_url": "jdbc:mysql://nat-r7-cuus-nifi-hdp-intg-re-2.openstacklocal", 
+                    "rangertagsync_user_password": "Rangerpassword@123", 
+                    "rangerusersync_user_password": "Rangerpassword@123", 
+                    "xasecure.audit.destination.solr": "false"
+                }
+            }
+        }, 
+        {
+            "ranger-tagsync-policymgr-ssl": {
+                "properties": {
+                    "xasecure.policymgr.clientssl.keystore": "/etc/security/serverKeys/ranger-tagsync-keystore.jks", 
+                    "xasecure.policymgr.clientssl.keystore.password": "xasecure", 
+                    "xasecure.policymgr.clientssl.truststore": "/etc/security/serverKeys/mytruststore.jks", 
+                    "xasecure.policymgr.clientssl.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "kerberos-env": {
+                "properties": {
+                    "admin_server_host": "hdf-kerberos.openstacklocal", 
+                    "encryption_types": "aes des3-cbc-sha1 rc4 des-cbc-md5", 
+                    "kdc_hosts": "hdf-kerberos.openstacklocal", 
+                    "kdc_type": "mit-kdc", 
+                    "realm": "HDF.COM", 
+                    "service_check_principal_name": "cl1-kDZ56gsAHy"
+                }
+            }
+        }, 
+        {
+            "ams-grafana-env": {
+                "properties": {
+                    "metrics_grafana_password": "admin"
+                }
+            }
+        }, 
+        {
+            "ranger-ugsync-site": {
+                "properties": {
+                    "ranger.usersync.truststore.file": "/etc/security/serverKeys/mytruststore.jks", 
+                    "ranger.usersync.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "ams-ssl-client": {
+                "properties": {
+                    "ssl.client.truststore.location": "/etc/security/clientKeys/all.jks", 
+                    "ssl.client.truststore.password": "clientTrustStorePassword", 
+                    "ssl.client.truststore.type": "jks"
+                }
+            }
+        }, 
+        {
+            "ranger-hdfs-plugin-properties": {
+                "properties": {
+                    "REPOSITORY_CONFIG_USERNAME": "hadoop", 
+                    "common.name.for.certificate": "-", 
+                    "policy_user": "ambari-qa", 
+                    "ranger-hdfs-plugin-enabled": "Yes"
+                }
+            }
+        }, 
+        {
+            "admin-properties": {
+                "properties": {
+                    "DB_FLAVOR": "MYSQL", 
+                    "SQL_CONNECTOR_JAR": "/usr/share/java/mysql-connector-java.jar", 
+                    "audit_db_name": "ranger_audit", 
+                    "audit_db_password": "rangerlogger", 
+                    "audit_db_user": "rangerlogger", 
+                    "db_host": "nat-r7-cuus-nifi-hdp-intg-re-2.openstacklocal", 
+                    "db_name": "ranger", 
+                    "db_password": "rangeradmin", 
+                    "db_root_password": "mysql", 
+                    "db_root_user": "root", 
+                    "db_user": "rangeradmin", 
+                    "policymgr_external_url": "https://nat-r7-cuus-nifi-hdp-intg-re-3.openstacklocal:6182"
+                }
+            }
+        }, 
+        {
+            "hdfs-site": {
+                "properties": {
+                    "dfs.client.https.need-auth": "false", 
+                    "dfs.datanode.data.dir": "/grid/0/hadoop/hdfs/data", 
+                    "dfs.datanode.https.address": "0.0.0.0:50475", 
+                    "dfs.disk.balancer.enabled": "true", 
+                    "dfs.encrypt.data.transfer": "true", 
+                    "dfs.encrypt.data.transfer.algorithm": "3des", 
+                    "dfs.http.policy": "HTTPS_ONLY", 
+                    "dfs.https.enable": "true", 
+                    "dfs.journalnode.edits.dir": "/hadoop/hdfs/journal", 
+                    "dfs.namenode.checkpoint.dir": "/hadoop/hdfs/namesecondary", 
+                    "dfs.namenode.http-address": "%HOSTGROUP::host_group_master%:20070", 
+                    "dfs.namenode.https-address": "%HOSTGROUP::host_group_master%:50470", 
+                    "dfs.namenode.inode.attributes.provider.class": "org.apache.ranger.authorization.hadoop.RangerHdfsAuthorizer", 
+                    "dfs.namenode.name.dir": "/hadoop/hdfs/namenode", 
+                    "dfs.namenode.secondary.http-address": "0.0.0.0:50090", 
+                    "dfs.namenode.secondary.https-address": "0.0.0.0:50091", 
+                    "dfs.support.append": "true"
+                }
+            }
+        }, 
+        {
+            "ams-env": {
+                "properties": {
+                    "metrics_collector_log_dir": "/grid/0/log/metric_collector", 
+                    "metrics_monitor_log_dir": "/grid/0/log/metric_monitor"
+                }
+            }
+        }, 
+        {
+            "nifi-properties": {
+                "properties": {
+                    "nifi.cluster.flow.election.max.wait.time": "2 mins", 
+                    "nifi.cluster.node.connection.timeout": "10 sec", 
+                    "nifi.cluster.node.protocol.threads": "20", 
+                    "nifi.cluster.node.read.timeout": "30 sec", 
+                    "nifi.remote.input.host": "{{nifi_node_ssl_host}}", 
+                    "nifi.remote.input.socket.port": "9889", 
+                    "nifi.security.identity.mapping.pattern.dn": "^CN=(.*?), OU=(.*?)$", 
+                    "nifi.security.identity.mapping.pattern.kerb": "^(.*?)/instance@(.*?)$", 
+                    "nifi.security.identity.mapping.value.dn": "$1@$2", 
+                    "nifi.security.identity.mapping.value.kerb": "$1@$2"
+                }
+            }
+        }, 
+        {
+            "ams-site": {
+                "properties": {
+                    "timeline.metrics.hbase.init.check.enabled": "false", 
+                    "timeline.metrics.service.http.policy": "HTTPS_ONLY", 
+                    "timeline.metrics.service.rpc.address": "0.0.0.0:20200"
+                }
+            }
+        }, 
+        {
+            "knox-env": {
+                "properties": {
+                    "knox_master_secret": "knoxsecret"
+                }
+            }
+        }, 
+        {
+            "ams-grafana-ini": {
+                "properties": {
+                    "cert_file": "/etc/ambari-metrics-grafana/conf/ams-grafana.crt", 
+                    "cert_key": "/etc/ambari-metrics-grafana/conf/ams-grafana.key", 
+                    "protocol": "https"
+                }
+            }
+        }, 
+        {
+            "nifi-env": {
+                "properties": {
+                    "nifi_node_log_dir": "/grid/0/log/nifi"
+                }
+            }
+        }, 
+        {
+            "mapred-env": {
+                "properties": {
+                    "mapred_log_dir_prefix": "/grid/0/log/hadoop-mapreduce", 
+                    "mapreduce_log_dir_prefix": "/grid/0/log/hadoop-mapreduce"
+                }
+            }
+        }, 
+        {
+            "nifi-ambari-config": {
+                "properties": {
+                    "nifi.content.repository.dir.default": "/grid/0/hdf/nifi/content_repository", 
+                    "nifi.database.dir": "/grid/0/hdf/nifi/database_repository", 
+                    "nifi.flowfile.repository.dir": "/grid/0/hdf/nifi/flowfile_repository", 
+                    "nifi.initial_mem": "4096m", 
+                    "nifi.max_mem": "4096m", 
+                    "nifi.provenance.repository.dir.default": "/grid/0/hdf/nifi/provenance_repository", 
+                    "nifi.security.encrypt.configuration.password": "l0GoucsxFYiQab9XmjC3", 
+                    "nifi.sensitive.props.key": "7F6dvY8Hwgdwz9aB"
+                }
+            }
+        }, 
+        {
+            "ams-ssl-server": {
+                "properties": {
+                    "ssl.server.keystore.keypassword": "serverKeyPassPassword", 
+                    "ssl.server.keystore.location": "/etc/security/serverKeys/keystore.jks", 
+                    "ssl.server.keystore.password": "serverStorePassPassword", 
+                    "ssl.server.keystore.type": "jks", 
+                    "ssl.server.truststore.location": "/etc/security/serverKeys/truststore.jks", 
+                    "ssl.server.truststore.password": "serverTrustStorePassword", 
+                    "ssl.server.truststore.reload.interval": "10000", 
+                    "ssl.server.truststore.type": "jks"
+                }
+            }
+        }, 
+        {
+            "core-site": {
+                "properties": {
+                    "fs.azure.account.key.hwxasvtesting.blob.core.windows.net": "R/1hsiE/qdHPZU9yfrSPlOcJ7AvPAtdsaNyRxaWC++NkU8jxHNC1m6ZsuOpRqyodiP/Fnn29NrI+/zZ4nEJN6A==", 
+                    "hadoop.proxyuser.falcon.groups": "*", 
+                    "hadoop.proxyuser.falcon.hosts": "*", 
+                    "hadoop.proxyuser.hcat.groups": "*", 
+                    "hadoop.proxyuser.hdfs.groups": "*", 
+                    "hadoop.proxyuser.hdfs.hosts": "*", 
+                    "hadoop.proxyuser.hive.groups": "*", 
+                    "hadoop.proxyuser.hive.hosts": "*", 
+                    "hadoop.proxyuser.oozie.groups": "*", 
+                    "hadoop.proxyuser.oozie.hosts": "*", 
+                    "hadoop.rpc.protection": "privacy", 
+                    "hadoop.ssl.client.conf": "ssl-client.xml", 
+                    "hadoop.ssl.hostname.verifier": "DEFAULT", 
+                    "hadoop.ssl.keystores.factory.class": "org.apache.hadoop.security.ssl.FileBasedKeyStoresFactory", 
+                    "hadoop.ssl.require.client.cert": "false", 
+                    "hadoop.ssl.server.conf": "ssl-server.xml", 
+                    "io.compression.codec.lzo.class": "com.hadoop.compression.lzo.LzoCodec", 
+                    "io.compression.codecs": "org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.SnappyCodec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec", 
+                    "proxyuser_group": "users"
+                }
+            }
+        }, 
+        {
+            "krb5-conf": {
+                "properties": {
+                    "domains": "hwx.site,.hwx.site", 
+                    "manage_krb5_conf": "true"
+                }
+            }
+        }, 
+        {
+            "yarn-hbase-site": {
+                "properties": {
+                    "hbase.master.hfilecleaner.ttl": "604800000", 
+                    "hbase.master.logcleaner.ttl": "604800000", 
+                    "hbase.master.namespace.init.timeout": "86400000"
+                }
+            }
+        }, 
+        {
+            "yarn-hbase-env": {
+                "properties": {
+                    "yarn_hbase_log_level": "DEBUG"
+                }
+            }
+        }, 
+        {
+            "ranger-yarn-policymgr-ssl": {
+                "properties": {
+                    "xasecure.policymgr.clientssl.keystore": "/etc/security/serverKeys/ranger-yarn-plugin-keystore.jks", 
+                    "xasecure.policymgr.clientssl.keystore.password": "myKeyFilePassword", 
+                    "xasecure.policymgr.clientssl.truststore": "/etc/security/serverKeys/ranger-yarn-plugin-truststore.jks", 
+                    "xasecure.policymgr.clientssl.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "hadoop-env": {
+                "properties": {
+                    "hdfs_log_dir_prefix": "/grid/0/log/hdfs", 
+                    "namenode_heapsize": "1500"
+                }
+            }
+        }, 
+        {
+            "yarn-site": {
+                "properties": {
+                    "yarn.authorization-provider": "org.apache.ranger.authorization.yarn.authorizer.RangerYarnAuthorizer", 
+                    "yarn.http.policy": "HTTPS_ONLY", 
+                    "yarn.log.server.url": "https://%HOSTGROUP::host_group_master%:19888/jobhistory/logs", 
+                    "yarn.log.server.web-service.url": "https://%HOSTGROUP::host_group_master%:8190/ws/v1/applicationhistory", 
+                    "yarn.nodemanager.address": "0.0.0.0:25454", 
+                    "yarn.nodemanager.delete.debug-delay-sec": "3600", 
+                    "yarn.nodemanager.local-dirs": "/grid/0/hadoop/yarn/local", 
+                    "yarn.nodemanager.log-dirs": "/grid/0/hadoop/yarn/log", 
+                    "yarn.nodemanager.resourcemanager.connect.max-wait.ms": "3600000", 
+                    "yarn.nodemanager.webapp.https.address": "0.0.0.0:54321", 
+                    "yarn.resourcemanager.webapp.https.address": "%HOSTGROUP::host_group_master%:8090", 
+                    "yarn.timeline-service.enabled": "true", 
+                    "yarn.timeline-service.leveldb-state-store.path": "/grid/0/hadoop/yarn/timeline", 
+                    "yarn.timeline-service.leveldb-timeline-store.path": "/grid/0/hadoop/yarn/timeline", 
+                    "yarn.timeline-service.webapp.https.address": "%HOSTGROUP::host_group_master%:8190"
+                }
+            }
+        }, 
+        {
+            "yarn-env": {
+                "properties": {
+                    "yarn_log_dir_prefix": "/grid/0/log/yarn"
+                }
+            }
+        }, 
+        {
+            "capacity-scheduler": {
+                "properties": {
+                    "yarn.scheduler.capacity.maximum-am-resource-percent": "0.4", 
+                    "yarn.scheduler.capacity.root.acl_submit_applications": "hive,zeppelin,hbase,ambari-qa users"
+                }
+            }
+        }, 
+        {
+            "ranger-knox-policymgr-ssl": {
+                "properties": {
+                    "xasecure.policymgr.clientssl.keystore": "/etc/security/serverKeys/ranger-plugin-keystore.jks", 
+                    "xasecure.policymgr.clientssl.keystore.password": "myKeyFilePassword", 
+                    "xasecure.policymgr.clientssl.truststore": "/etc/security/serverKeys/ranger-plugin-truststore.jks", 
+                    "xasecure.policymgr.clientssl.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "ssl-server": {
+                "properties": {
+                    "ssl.server.keystore.keypassword": "serverKeyPassPassword", 
+                    "ssl.server.keystore.location": "/etc/security/serverKeys/keystore.jks", 
+                    "ssl.server.keystore.password": "serverStorePassPassword", 
+                    "ssl.server.keystore.type": "jks", 
+                    "ssl.server.truststore.location": "/etc/security/serverKeys/truststore.jks", 
+                    "ssl.server.truststore.password": "serverTrustStorePassword", 
+                    "ssl.server.truststore.type": "jks"
+                }
+            }
+        }, 
+        {
+            "ranger-hdfs-policymgr-ssl": {
+                "properties": {
+                    "xasecure.policymgr.clientssl.keystore": "/etc/security/serverKeys/ranger-plugin-keystore.jks", 
+                    "xasecure.policymgr.clientssl.keystore.password": "myKeyFilePassword", 
+                    "xasecure.policymgr.clientssl.truststore": "/etc/security/serverKeys/ranger-plugin-truststore.jks", 
+                    "xasecure.policymgr.clientssl.truststore.password": "changeit"
+                }
+            }
+        }, 
+        {
+            "zoo.cfg": {
+                "properties": {
+                    "dataDir": "/grid/0/hadoop/zookeeper", 
+                    "secureClientPort": "2281", 
+                    "tickTime": "4500"
+                }
+            }
+        }, 
+        {
+            "registry-env": {
+                "properties": {
+                    "registry_log_dir": "/grid/0/log/registry"
+                }
+            }
+        }, 
+        {
+            "kms-env": {
+                "properties": {
+                    "kms_port": "9393"
+                }
+            }
+        }, 
+        {
+            "nifi-ambari-ssl-config": {
+                "properties": {
+                    "content": "<property name=\"NiFi Identity 1\">CN=nat-r7-cuus-nifi-hdp-intg-re-5.openstacklocal, OU=NIFI</property>\n<property name=\"NiFi Identity 2\">CN=nat-r7-cuus-nifi-hdp-intg-re-3.openstacklocal, OU=NIFI</property>\n<property name=\"NiFi Identity 3\">CN=nat-r7-cuus-nifi-hdp-intg-re-4.openstacklocal, OU=NIFI</property>\n<property name=\"NiFi Identity 4\">CN=nat-r7-cuus-nifi-hdp-intg-re-1.openstacklocal, OU=NIFI</property>\n<property name=\"NiFi Identity 5\">CN=nat-r7-cuus-nifi-hdp-intg-re-2.openstacklocal, OU=NIFI</property>", 
+                    "nifi.initial.admin.identity": "hrt_qa@HDF.COM", 
+                    "nifi.node.ssl.isenabled": "true", 
+                    "nifi.security.keyPasswd": "knoxsecret", 
+                    "nifi.security.keystorePasswd": "knoxsecret", 
+                    "nifi.security.keystoreType": "JKS", 
+                    "nifi.security.needClientAuth": "true", 
+                    "nifi.security.truststorePasswd": "knoxsecret", 
+                    "nifi.security.truststoreType": "JKS", 
+                    "nifi.toolkit.tls.token": "7F6dvY8Hwgdwz9aB"
+                }
+            }
+        }, 
+        {
+            "zookeeper-env": {
+                "properties": {
+                    "content": "export JAVA_HOME={{java64_home}}\nexport ZOOKEEPER_HOME={{zk_home}}\nexport ZOO_LOG_DIR={{zk_log_dir}}\nexport ZOOPIDFILE={{zk_pid_file}}\nexport SERVER_JVMFLAGS={{zk_server_heapsize}}\nexport JAVA=$JAVA_HOME/bin/java\nexport CLASSPATH=$CLASSPATH:/usr/share/zookeeper/*\n\n{% if security_enabled %}\nexport SERVER_JVMFLAGS=\"$SERVER_JVMFLAGS -Djava.security.auth.login.config={{zk_server_jaas_file}}\"\nexport CLIENT_JVMFLAGS=\"$CLIENT_JVMFLAGS -Djava.security.auth.login.config={{zk_client_jaas_file}}\"\n{% endif %}\nexport SERVER_JVMFLAGS=\"$SERVER_JVMFLAGS\n-Dzookeeper.serverCnxnFactory=org.apache.zookeeper.server.NettyServerCnxnFactory\n-Dzookeeper.ssl.keyStore.location=/etc/security/serverKeys/keystore.jks\n-Dzookeeper.ssl.keyStore.password=serverStorePassPassword\n-Dzookeeper.ssl.trustStore.location=/etc/security/serverKeys/truststore.jks\n-Dzookeeper.ssl.trustStore.password=serverTrustStorePassword\"", 
+                    "zk_log_dir": "/grid/0/log/zookeeper"
+                }
+            }
+        }, 
+        {
+            "cluster-env": {
+                "properties": {
+                    "command_retry_max_time_in_sec": "1800", 
+                    "commands_to_retry": "START", 
+                    "sysprep_skip_create_users_and_groups": "true"
+                }
+            }
+        }
+    ], 
+    "host_groups": [
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "NAMENODE"
+                }, 
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "HISTORYSERVER"
+                }, 
+                {
+                    "name": "YARN_REGISTRY_DNS"
+                }, 
+                {
+                    "name": "RESOURCEMANAGER"
+                }, 
+                {
+                    "name": "TIMELINE_READER", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "APP_TIMELINE_SERVER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "METRICS_GRAFANA", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_COLLECTOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "KNOX_GATEWAY"
+                }, 
+                {
+                    "name": "NIFI_CA"
+                }, 
+                {
+                    "name": "NIFI_MASTER"
+                }, 
+                {
+                    "name": "RANGER_TAGSYNC", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "RANGER_ADMIN", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "RANGER_USERSYNC", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "NIFI_CA"
+                }, 
+                {
+                    "name": "NIFI_MASTER"
+                }, 
+                {
+                    "name": "REGISTRY_SERVER"
+                }
+            ], 
+            "name": "host_group_master"
+        }, 
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "SECONDARY_NAMENODE"
+                }, 
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "HDFS_CLIENT"
+                }, 
+                {
+                    "name": "MAPREDUCE2_CLIENT"
+                }, 
+                {
+                    "name": "YARN_CLIENT"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "NIFI_MASTER"
+                }, 
+                {
+                    "name": "NIFI_MASTER"
+                }, 
+                {
+                    "name": "REGISTRY_SERVER"
+                }, 
+                {
+                    "name": "KERBEROS_CLIENT"
+                }
+            ], 
+            "name": "host_group_gateway"
+        }, 
+        {
+            "cardinality": "1", 
+            "components": [
+                {
+                    "name": "DATANODE"
+                }, 
+                {
+                    "name": "NODEMANAGER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_SERVER"
+                }, 
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }, 
+                {
+                    "name": "METRICS_MONITOR", 
+                    "provision_action": "INSTALL_AND_START"
+                }, 
+                {
+                    "name": "NIFI_MASTER"
+                }, 
+                {
+                    "name": "NIFI_MASTER"
+                }
+            ], 
+            "name": "host_group_slave"
+        }
+    ]
+}
