@@ -2,13 +2,19 @@
 # tasks file for ssl
 - name: create workind directory for CA
   file:
-    path: "{{ssl.directory.ca}}"
+    path: "{{ssl.location.directory}}/ca"
     state: directory
-    owner: "{{ssl.directory.user}}"
-    group: "{{ssl.directory.group}}"    
+    owner: "{{ssl.location.user}}"
+    group: "{{ssl.location.group}}"    
     mode: 0550
-- stat: path="{{ssl.directory.ca}}/ca-priv-key"
+- stat: path="{{ssl.location.directory}}/ca/ca-priv-key"
   register: p    
 - name: Generate private key and public certifcate for CA
-  command: openssl req -new -newkey rsa:4096 -days 365  -x509  -subj '/CN={{ssl.ca.name}}' -keyout "{{ssl.directory.ca}}/ca-priv-key" -out "{{ssl.directory.ca}}/ca-pub-cert" -nodes
+  command: openssl req -new -newkey rsa:4096 -days 365  -x509  -subj '/CN={{ssl.ca.name}}' -keyout "{{ssl.location.directory}}/ca/ca-priv-key" -out "{{ssl.location.directory}}/ca/ca-pub-cert" -nodes
   when: not p.stat.exists
+- name: downloading the CAs pubic key 
+  fetch:
+    src: "{{ssl.location.directory}}/ca/ca-pub-cert"
+    dest: "/tmp/ca-pub-cert" 
+    flat: yes
+  

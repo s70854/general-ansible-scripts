@@ -9,7 +9,7 @@ release:
             url:  http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7/3.x/BUILDS/3.3.2.0-9/hdfbn.repo
             #mpack: http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.3.1.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.1.0-10.tar.gz
             mpack: http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7/3.x/BUILDS/3.3.2.0-9/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.2.0-9.tar.gz
-            install: yes 
+            install: no 
             purge: no 
             version: 3.3.2.0-9
         hdp:
@@ -87,11 +87,10 @@ kerberos:
 ssl:
     storepswd: passW0rd
     keypswd: passW0rd
-    directory: 
-      ca: /grid/0/kafka-security/ca
-      store: /grid/0/kafka-security/store
-      group: hadoop
-      user: kafka 
+    location: 
+      directory: /root/security
+      group: root
+      user: root 
     ca:
       name: QA-Security-CA
       

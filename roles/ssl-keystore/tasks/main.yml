@@ -2,70 +2,64 @@
 # tasks file for ssl
 - name: create working directory for server
   file:
-    path: "{{ssl.directory.store}}"
+    path: "{{ssl.location.directory}}/store"
     state: directory
-    owner: "{{ssl.directory.user}}"
-    group: "{{ssl.directory.group}}"    
+    owner: "{{ssl.location.user}}"
+    group: "{{ssl.location.group}}"    
     mode: 0550
 - name: remove old keystores    
   file:
-    path: "{{ssl.directory.store}}/keystore.jks"
+    path: "{{ssl.location.directory}}/store/keystore.jks"
     state: absent
 - name: remove old truststores   
   file:
-    path: "{{ssl.directory.store}}/truststore.jks"
+    path: "{{ssl.location.directory}}/store/truststore.jks"
     state: absent  
 - name: generate a fresh keystore   
-  command: keytool -genkey -keystore "{{ssl.directory.store}}/keystore.jks" -validity 365 -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -dname 'CN={{ansible_fqdn}}' -storetype pkcs12
+  command: keytool -genkey -keystore "{{ssl.location.directory}}/store/keystore.jks" -validity 365 -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -dname 'CN={{ansible_fqdn}}' -storetype pkcs12
 - name: generate a certificate sign request  
-  command: keytool -certreq -keystore "{{ssl.directory.store}}/keystore.jks" -file "{{ssl.directory.store}}/sign-req-{{ansible_fqdn}}" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}"
+  command: keytool -certreq -keystore "{{ssl.location.directory}}/store/keystore.jks" -file "{{ssl.location.directory}}/store/sign-req-{{ansible_fqdn}}" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}"
 - name: uploading the certificate request to CA ..
   fetch:
-    src: "{{ssl.directory.store}}/sign-req-{{ansible_fqdn}}"
+    src: "{{ssl.location.directory}}/store/sign-req-{{ansible_fqdn}}"
     dest: /tmp/
     flat: yes
 - name:  uploaded the certificate request to CA
   copy:
-    dest: "{{ssl.directory.ca}}/sign-req-{{ansible_fqdn}}"
+    dest: "{{ssl.location.directory}}/ca/sign-req-{{ansible_fqdn}}"
     src: "/tmp/sign-req-{{ansible_fqdn}}"
   delegate_to: "{{groups['gateway'][0]}}"
 - name: CA accepts and signs the certificate 
-  command: openssl x509  -req -CA "{{ssl.directory.ca}}/ca-pub-cert" -CAkey "{{ssl.directory.ca}}/ca-priv-key" -in "{{ssl.directory.ca}}/sign-req-{{ansible_fqdn}}" -out "{{ssl.directory.ca}}/cert-signed-{{ansible_fqdn}}" -days 365 -CAcreateserial -passin pass:"{{ssl.keypswd}}"
+  command: openssl x509  -req -CA "{{ssl.location.directory}}/ca/ca-pub-cert" -CAkey "{{ssl.location.directory}}/ca/ca-priv-key" -in "{{ssl.location.directory}}/ca/sign-req-{{ansible_fqdn}}" -out "{{ssl.location.directory}}/ca/cert-signed-{{ansible_fqdn}}" -days 365 -CAcreateserial -passin pass:"{{ssl.keypswd}}"
   delegate_to: "{{groups['gateway'][0]}}"
 - name: downloading the certificate request from CA ..
   fetch:
-    src: "{{ssl.directory.ca}}/cert-signed-{{ansible_fqdn}}"
+    src: "{{ssl.location.directory}}/ca/cert-signed-{{ansible_fqdn}}"
     dest: /tmp/
     flat: yes
   delegate_to: "{{groups['gateway'][0]}}"    
 - name: downloaded the certificate request 
   copy:
-    dest: "{{ssl.directory.store}}/cert-signed-{{ansible_fqdn}}"
+    dest: "{{ssl.location.directory}}/store/cert-signed-{{ansible_fqdn}}"
     src: "/tmp/cert-signed-{{ansible_fqdn}}"  
-- name: downloading the CAs pubic key ..
-  fetch:
-    src: "{{ssl.directory.ca}}/ca-pub-cert"
-    dest: "/tmp/ca-pub-cert-for-{{ansible_fqdn}}" 
-    flat: yes
-  delegate_to: "{{groups['gateway'][0]}}"  
 - name: downloaded the CAs pubic key 
   copy:
-    dest: "{{ssl.directory.store}}/ca-pub-cert"
-    src: "/tmp/ca-pub-cert-for-{{ansible_fqdn}}"  
+    dest: "{{ssl.location.directory}}/store/ca-pub-cert"
+    src: "/tmp/ca-pub-cert"  
 - name: import CAs pub certificate to server truststore
-  command: keytool -keystore "{{ssl.directory.store}}/truststore.jks" -alias CARoot -import -file "{{ssl.directory.store}}/ca-pub-cert" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt
+  command: keytool -keystore "{{ssl.location.directory}}/store/truststore.jks" -alias CARoot -import -file "{{ssl.location.directory}}/store/ca-pub-cert" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt
 - name: import CAs pub certificate to server truststore
-  command: keytool -keystore "{{ssl.directory.store}}/keystore.jks" -alias CARoot -import -file "{{ssl.directory.store}}/ca-pub-cert" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt
+  command: keytool -keystore "{{ssl.location.directory}}/store/keystore.jks" -alias CARoot -import -file "{{ssl.location.directory}}/store/ca-pub-cert" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt
 - name: import signed certificate to server keystore
-  command: keytool -keystore "{{ssl.directory.store}}/keystore.jks" -import -file "{{ssl.directory.store}}/cert-signed-{{ansible_fqdn}}" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt  
+  command: keytool -keystore "{{ssl.location.directory}}/store/keystore.jks" -import -file "{{ssl.location.directory}}/store/cert-signed-{{ansible_fqdn}}" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt  
   
 - name: grant access permission for stores
   file:
     path: "{{item}}"
-    owner: "{{ssl.directory.user}}"
-    group: "{{ssl.directory.group}}"    
+    owner: "{{ssl.location.user}}"
+    group: "{{ssl.location.group}}"    
     mode: 0550 
   with_items:
-    - "{{ssl.directory.store}}/truststore.jks"
-    - "{{ssl.directory.store}}/keystore.jks"
+    - "{{ssl.location.directory}}/store/truststore.jks"
+    - "{{ssl.location.directory}}/store/keystore.jks"
    
