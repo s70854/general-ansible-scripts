@@ -88,10 +88,12 @@ ssl:
     storepswd: passW0rd
     keypswd: passW0rd
     location: 
-      directory: /root/security
-      group: root
-      user: root 
+      directory: /grid/0/kafka-security2 
+      group: hadoop
+      user: kafka 
     ca:
       name: QA-Security-CA
+    local:
+      user: satya
       
 ...

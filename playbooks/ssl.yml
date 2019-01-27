@@ -5,7 +5,11 @@
   tasks: 
     - file: 
         state: absent
-        path: /tmp/ca-pub-cert
+        path: "{{item}}"
+      with_items:
+        - /tmp/ca-pub-cert
+        - /tmp/truststore.jks
+        - /tmp/keystore.jks
 - name: configure CA
   hosts: gateway
   roles: 
@@ -14,3 +18,34 @@
   hosts: all
   roles: 
   - roles/ssl-keystore  
+
+- name: local ssl store configuration
+  hosts: 127.0.0.1
+  connection: local
+  tasks: 
+    - name: generate a fresh keystore  for local user 
+      command: keytool -genkey -keystore "/tmp/keystore.jks" -validity 365 -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -dname 'CN={{ssl.local.user}}' -storetype pkcs12
+    - name: generate a certificate sign request  
+      command: keytool -certreq -keystore "/tmp/keystore.jks" -file "/tmp/sign-req-{{ssl.local.user}}" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}"
+    - name:  uploaded the local certificate request to CA
+      copy:
+        dest: "{{ssl.location.directory}}/ca/sign-req-{{ssl.local.user}}"
+        src: "/tmp/sign-req-{{ssl.local.user}}"  
+      delegate_to: "{{groups['gateway'][0]}}"
+    - name: CA accepts and signs the certificate 
+      command: openssl x509  -req -CA "{{ssl.location.directory}}/ca/ca-pub-cert" -CAkey "{{ssl.location.directory}}/ca/ca-priv-key" -in "{{ssl.location.directory}}/ca/sign-req-{{ssl.local.user}}" -out "{{ssl.location.directory}}/ca/cert-signed-{{ssl.local.user}}" -days 365 -CAcreateserial -passin pass:"{{ssl.keypswd}}"
+      delegate_to: "{{groups['gateway'][0]}}"
+    - name: downloading the certificate request from CA ..
+      fetch:
+        src: "{{ssl.location.directory}}/ca/cert-signed-{{ssl.local.user}}"
+        dest: /tmp/
+        flat: yes
+      delegate_to: "{{groups['gateway'][0]}}"    
+    - name: import CAs pub certificate to server truststore
+      command: keytool -keystore "/tmp/truststore.jks" -alias CARoot -import -file "/tmp/ca-pub-cert" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt
+    - name: import CAs pub certificate to server truststore
+      command: keytool -keystore "/tmp/keystore.jks" -alias CARoot -import -file "/tmp/ca-pub-cert" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt
+    - name: import signed certificate to server keystore
+      command: keytool -keystore "/tmp/keystore.jks" -import -file "/tmp/cert-signed-{{ssl.local.user}}" -storepass "{{ssl.storepswd}}" -keypass "{{ssl.keypswd}}" -noprompt  
+  tags:
+  - localStoreConfig       
