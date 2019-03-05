@@ -9,7 +9,7 @@
     insertafter: '^ *\[mysqld\] *$' 
     line: '{{item}}'
   loop:
-    - innodb_large_prefix
+    - innodb_large_prefix = 1
     - innodb_file_per_table = 1
     - innodb_file_format = Barracuda
 - name: enable service mariadb for RedHat systems

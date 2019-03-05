@@ -4,21 +4,21 @@
 # eg:  "HDF-3.3"["manifests"]["3.0.1.0"]["centos-ppc7"]  ->   3.3.1.0-10 (just version, HDP/HDF should be dropped)
 release:
         ambari: 
-            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.7.3.0-142/ambaribn.repo
+            url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7-ppc/2.x/BUILDS/2.7.3.0-139/ambaribn.repo
         hdf:
-            url:  http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7/3.x/BUILDS/3.3.2.0-9/hdfbn.repo
+            url:  http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7-ppc/3.x/BUILDS/3.3.1.0-10/hdfbn.repo
             #mpack: http://public-repo-1.hortonworks.com/HDF/centos7/3.x/updates/3.3.1.0/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.1.0-10.tar.gz
-            mpack: http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7/3.x/BUILDS/3.3.2.0-9/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.2.0-9.tar.gz
-            install: no 
-            purge: no 
-            version: 3.3.2.0-9
+            mpack: http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7-ppc/3.x/BUILDS/3.3.1.0-10/tars/hdf_ambari_mp/hdf-ambari-mpack-3.3.1.0-10.tar.gz
+            install: yes 
+            purge: yes 
+            version: 3.3.1.0-10
         hdp:
-            url:    http://s3.amazonaws.com/dev.hortonworks.com/HDP/centos7/3.x/BUILDS/3.1.0.0-78/hdpbn.repo
+            url:    http://s3.amazonaws.com/dev.hortonworks.com/HDP/centos-ppc7/3.x/BUILDS/3.1.0.0-78/hdpbn.repo
             version: 3.1.0.0-78
             #url:  http://public-repo-1.hortonworks.com/HDP/centos7/3.x/updates/3.0.1.0/hdp.repo
             #version: 3.0.1.0-187
         hdp_gpl:
-            base_url: http://public-repo-1.hortonworks.com/HDP-GPL/centos7/3.x/updates/3.1.0.0
+            base_url: http://public-repo-1.hortonworks.com/HDP-GPL/centos-ppc7/3.x/updates/3.1.0.0
             version: HDP-3.1-GPL
         hdp_utils:
             base_url: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/centos7
