@@ -1,0 +1,19 @@
+{% for group in ldap.groups %}
+{% for user in group.users %}
+dn: uid={{ user.name }},ou=Users,{{ ldap.olcSuffix }}
+objectclass:top
+objectclass:person
+objectclass:organizationalPerson
+objectclass:inetOrgPerson
+objectclass:posixaccount
+cn: {{ user.name }}
+sn: sir.{{ user.name }}
+uid: {{ user.name }}
+homedirectory:/home/{{ user.name }}
+uidNumber: {{ user.id }}
+gidNumber: {{ group.id }}
+userPassword:{{ user.name }}
+
+{% endfor %}
+
+{% endfor %}

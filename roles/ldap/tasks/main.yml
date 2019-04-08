@@ -1,0 +1,227 @@
+---
+# post install tests
+# ldapsearch -x cn=rangeradmin -b ou=Users,dc=hortonworks,dc=com
+# ldapsearch -h localhost -D "cn=ldapadm,dc=hortonworks,dc=com" -w passW0rd  -b "dc=hortonworks,dc=com"
+# kadmin.local > addprinc -x dn="uid=rangeradmin,ou=Users,dc=hortonworks,dc=com" rangeradmin
+# refrences:
+#  1, https://www.itzgeek.com/how-tos/linux/centos-how-tos/step-step-openldap-server-configuration-centos-7-rhel-7.html
+#  2, https://help.ubuntu.com/lts/serverguide/kerberos-ldap.html.en
+
+# Install open ldap packages
+- name: install pexpect. It is required for interactive command line operations
+  pip:
+    name: pexpect
+    version: 3.3
+     
+- name: Install required ldap pacakges
+  yum: name="{{ item }}" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"
+  loop:
+    - openldap
+    - compat-openldap
+    - openldap-clients
+    - openldap-servers
+    - openldap-servers-sql
+    - openldap-devel
+    - krb5-server-ldap
+    - phpldapadmin
+
+# start ldap service
+- name: enable service slapd for RedHat systems
+  systemd:
+    name: slapd
+    state: started
+    enabled: yes
+
+# setup ldap admin password
+- name: generate password for the admin user
+  command: slappasswd -h {SSHA} -s  {{ ldap.olcRootPW}}
+  register: sshaPassword       
+
+- template: 
+    src: templates/db.ldif.j2
+    dest: /root/db.ldif
+    mode: 0755 
+
+- name: modify the rootDN settings
+  command: ldapmodify -Y EXTERNAL  -H ldapi:/// -f /root/db.ldif
+
+- template: 
+    src: templates/monitor.ldif.j2
+    dest: /root/monitor.ldif
+    mode: 0755 
+
+- name: modify the rootDN settings - monitor
+  command: ldapmodify -Y EXTERNAL  -H ldapi:/// -f /root/monitor.ldif
+
+
+
+# setup ldap database
+- name: Copy the sample database configuration file to /var/lib/ldap and update the file permissions.
+  copy:
+    remote_src: true
+    src: /usr/share/openldap-servers/DB_CONFIG.example
+    dest: /var/lib/ldap/DB_CONFIG
+    owner: ldap
+    group: ldap
+    mode: 0644
+
+# import required LDAP Schemas
+- name: add ldap schemas
+  command: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/{{ item }}
+  loop:
+    - cosine.ldif
+    - nis.ldif
+    - inetorgperson.ldif
+ 
+# generate the ldif files 
+- name: generate the required ldif files 
+  template: 
+    src: templates/{{item}}.ldif.j2
+    dest: /root/{{item}}.ldif
+    mode: 0755 
+  loop:
+    - base
+    - groups
+    - users
+
+# create ldap users/groups
+- name: build the directory structure
+  command: ldapadd -x -w "{{ ldap.olcRootPW }}" -D "{{ ldap.olcRootDN }}" -f /root/{{item}}.ldif
+  loop:
+    - base
+    - groups
+    - users  
+
+# kdc setup now
+- name: Install a new version of the KDC server
+  yum: name="{{ item }}" state=latest update_cache=yes
+  when: ansible_facts['os_family'] == "RedHat"
+  loop:
+    - krb5-server
+    - krb5-libs
+    - krb5-workstation
+    - krb5-pkinit-openssl
+    - krb5-server-ldap
+
+- name: find the kerberos.schema file
+  find:
+    paths: /usr/share
+    patterns: kerberos.schema
+    recurse: yes
+  register: files_matched
+
+- name: Copy the kerberos schema file to ldap standard directory.
+  copy:
+    remote_src: true
+    src: "{{ files_matched.files.0.path }}"
+    dest: /etc/openldap/schema/kerberos.schema
+    owner: ldap
+    group: ldap
+    mode: 0644
+    
+- name: kerberos schema needs to be added to the cn=config tree - prepare schema_convert.conf
+  lineinfile:
+    path: /root/schema_convert.conf
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - include /etc/openldap/schema/core.schema
+    - include /etc/openldap/schema/collective.schema
+    - include /etc/openldap/schema/corba.schema
+    - include /etc/openldap/schema/cosine.schema
+    - include /etc/openldap/schema/duaconf.schema
+    - include /etc/openldap/schema/dyngroup.schema
+    - include /etc/openldap/schema/inetorgperson.schema
+    - include /etc/openldap/schema/java.schema
+    - include /etc/openldap/schema/misc.schema
+    - include /etc/openldap/schema/nis.schema
+    - include /etc/openldap/schema/openldap.schema
+    - include /etc/openldap/schema/ppolicy.schema
+    - include /etc/openldap/schema/kerberos.schema
+- file:
+    path: /tmp/ldif_output
+    state: directory
+    mode: 0755
+- name: generate kerberos.ldif
+  shell: slapcat -f /root/schema_convert.conf -F /tmp/ldif_output -n0 -s "cn={12}kerberos,cn=schema,cn=config" > /tmp/cn\=kerberos.ldif
+
+- name: make corrections to kerberos.ldif
+  lineinfile:
+    path: /tmp/cn=kerberos.ldif
+    regexp: "{{ item.search }}"
+    line: "{{ item.replace }}"
+  with_items:
+    - {search: '^ *dn: *', replace: 'dn: cn=kerberos,cn=schema,cn=config'}
+    - {search: '^ *cn: *', replace: 'cn: kerberos'}
+    
+- name: make corrections to kerberos.ldif  - delete unwanted lines
+  lineinfile:
+    path: /tmp/cn=kerberos.ldif
+    state: absent
+    regexp: "{{ item }}"
+  with_items:
+    - "^ *structuralObjectClass:"
+    - "^ *entryUUID:"
+    - "^ *creatorsName:"
+    - "^ *createTimestamp:"
+    - "^ *entryCSN:"
+    - "^ *modifiersName:"
+    - "^ *modifyTimestamp:"
+   
+- name: Load the new schema with ldapadd
+  command: ldapadd -Q -Y EXTERNAL -H ldapi:/// -f /tmp/cn\=kerberos.ldif
+   
+- name: Add an index for the krb5principalname attribute - prepare ldif
+  lineinfile:
+    path: /root/krb5principalname.ldif
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - "dn: olcDatabase={2}hdb,cn=config"
+    - "add: olcDbIndex"
+    - "olcDbIndex: krbPrincipalName eq,pres,sub"
+    
+- name: Add an index for the krb5principalname attribute - load ldif
+  command: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f /root/krb5principalname.ldif
+
+- template: 
+    src: templates/mod_acls.ldif.j2
+    dest: /root/mod_acls.ldif
+    mode: 0755 
+
+- name: update the Access Control Lists (ACL)
+  command: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f /root/mod_acls.ldif
+  
+- template: 
+    src: templates/krb5.conf.j2
+    dest: /etc/krb5.conf
+    mode: 0755   
+    
+- name: Create the realm
+  expect:
+    command: kdb5_ldap_util -D {{ldap.olcRootDN}} -w "{{ ldap.olcRootPW }}" create -subtrees {{ldap.olcSuffix}} -r {{kerberos.realm}} -s -H ldap://{{hostvars[groups['ldap'][0]].ansible_fqdn}}
+    responses:
+      database master key: "{{ kerberos.db_master_key }}"
+      database master key to verify: "{{ kerberos.db_master_key }}"  
+     
+- file:
+    path: /etc/krb5kdc
+    state: directory
+    mode: 0755   
+   
+- name: Create a stash of the password used to bind to the LDAP server
+  expect:
+    command: kdb5_ldap_util -D {{ldap.olcRootDN}} -w "{{ ldap.olcRootPW }}" stashsrvpw -f /etc/krb5kdc/service.keyfile {{ldap.olcRootDN}}
+    responses:
+      Password for: "{{ ldap.olcRootPW }}"
+      Re-enter password for: "{{ ldap.olcRootPW }}"
+- name: Start the KDC server and the KDC admin server
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - krb5kdc
+    - kadmin      
+       

@@ -1,0 +1,17 @@
+dn: {{ ldap.olcSuffix }}
+dc: {{ ldap.olcSuffixTopDomain }}
+objectClass: top
+objectClass: domain
+
+dn: {{ ldap.olcRootDN }}
+objectClass: organizationalRole
+cn: {{ ldap.olcRootCN }} 
+description: LDAP Manager
+
+dn: ou=Users,{{ ldap.olcSuffix }}
+objectClass: organizationalUnit
+ou: Users
+
+dn: ou=Groups,{{ ldap.olcSuffix }}
+objectClass: organizationalUnit
+ou: Groups

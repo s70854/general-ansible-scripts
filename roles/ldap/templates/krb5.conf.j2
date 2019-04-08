@@ -1,0 +1,46 @@
+[libdefaults]
+  renew_lifetime = 7d
+  forwardable = true
+  default_realm = {{kerberos.realm}}
+  ticket_lifetime = 24h
+  dns_lookup_realm = false
+  dns_lookup_kdc = false
+  default_ccache_name = /tmp/krb5cc_%{uid}
+  default_tgs_enctypes = aes des3-cbc-sha1 rc4 des-cbc-md5
+  default_tkt_enctypes = aes des3-cbc-sha1 rc4 des-cbc-md5
+
+[domain_realm]
+  hwx.site = {{kerberos.realm}}
+  .hwx.site = {{kerberos.realm}}
+
+[logging]
+  default = FILE:/var/log/krb5kdc.log
+  admin_server = FILE:/var/log/kadmind.log
+  kdc = FILE:/var/log/krb5kdc.log
+
+[realms]
+  {{kerberos.realm}} = {
+    admin_server = {{hostvars[groups['ldap'][0]].ansible_fqdn}}
+    kdc = {{hostvars[groups['ldap'][0]].ansible_fqdn}}
+    default_domain = {{kerberos.realm}}
+    database_module = openldap_ldapconf    
+  }
+
+[dbdefaults]
+        ldap_kerberos_container_dn = cn=krbContainer,{{ldap.olcSuffix}}
+
+[dbmodules]
+        openldap_ldapconf = {
+                db_library = kldap
+                ldap_kdc_dn = "{{ldap.olcRootDN}}"
+
+                # this object needs to have read rights on
+                # the realm container, principal container and realm sub-trees
+                ldap_kadmind_dn =  "{{ldap.olcRootDN}}"
+
+                # this object needs to have read and write rights on
+                # the realm container, principal container and realm sub-trees
+                ldap_service_password_file = /etc/krb5kdc/service.keyfile
+                ldap_servers = ldap://{{hostvars[groups['ldap'][0]].ansible_fqdn}}
+                ldap_conns_per_server = 5
+        }

@@ -1,0 +1,10 @@
+{% for group in ldap.groups %}
+dn: cn={{ group.name }},ou=Groups,{{ ldap.olcSuffix }}
+cn: {{ group.name }}
+objectclass: posixgroup
+gidNumber: {{group.id}}
+{% for user in group.users %}
+memberuid: {{user.name}}
+{% endfor %}
+
+{% endfor %}

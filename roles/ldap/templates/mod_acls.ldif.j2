@@ -1,0 +1,9 @@
+dn: olcDatabase={2}hdb,cn=config
+replace: olcAccess
+olcAccess: to attrs=userPassword,shadowLastChange,krbPrincipalKey by dn="{{ldap.olcRootDN}}" write by anonymous auth by self write by * none
+-
+add: olcAccess
+olcAccess: to dn.base="" by * read
+-
+add: olcAccess
+olcAccess: to * by dn="{{ldap.olcRootDN}}" write by * read

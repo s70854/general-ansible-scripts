@@ -96,4 +96,54 @@ ssl:
     local:
       user: satya
       
+# ldap configurations
+ldap:
+  olcSuffix: dc=hortonworks,dc=com
+  olcRootDN: cn=ldapadm,dc=hortonworks,dc=com
+  olcRootCN: ldapadm
+  olcSuffixTopDomain: hortonworks
+  olcRootPW: passW0rd
+  groups:
+    - name: marketing
+      id: 75000001
+      users:
+        - name: mkt1
+          id: 75000010
+        - name: mkt2
+          id: 75000011
+    - name: hr
+      id: 75000002
+      users:
+        - name: hr1
+          id: 75000012
+        - name: hr2
+          id: 75000013      
+    - name: legal
+      id: 75000003
+      users:
+        - name: legal1
+          id: 75000014
+        - name: legal2
+          id: 75000015      
+    - name: finance
+      id: 75000004
+      users:
+        - name: finance1
+          id: 75000016
+        - name: finance2
+          id: 75000017         
+    - name: sales
+      id: 75000005
+      users:
+        - name: sales1
+          id: 75000018
+        - name: sales2
+          id: 75000019       
+    - name: admins
+      id: 75000006
+      users:
+        - name: rangeradmin
+          id: 75000020
+        - name: xapolicymgr
+          id: 75000021     
 ...
