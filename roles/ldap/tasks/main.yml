@@ -84,6 +84,8 @@
     - base
     - groups
     - users
+  tags:
+    - this
 
 # create ldap users/groups
 - name: build the directory structure
@@ -224,4 +226,17 @@
   loop:
     - krb5kdc
     - kadmin      
+- name: Create a Kerberos Admin
+  expect:
+    command: kadmin.local -q "addprinc admin/admin"
+    responses:
+      Enter password for principal: "{{ kerberos.admin_princ_pswd }}"
+      Re-enter password for principal: "{{ kerberos.admin_princ_pswd }}"
+- name: ensure that kdc acl file includes the realm
+  shell: sed -i '1,$s/EXAMPLE.COM/{{kerberos.realm}}/g' /var/kerberos/krb5kdc/kadm5.acl
+- name: restart the kadmin process
+  systemd:
+    name: kadmin
+    state: restarted
+    enabled: yes
        

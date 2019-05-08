@@ -13,7 +13,7 @@
   roles: 
   - role: roles/database-mysql
     when: database.dbflavour == "mysql"
-- name: setup kerberos
-  hosts: kdc
-  roles: 
-  - role: roles/kdc    
+#- name: setup kdc
+#  hosts: kdc
+#  roles: 
+#  - role: roles/kdc    

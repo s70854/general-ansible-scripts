@@ -42,6 +42,8 @@
     path: /root/.bashrc
     line: "export JAVA_HOME={{java.home}}"
     insertafter: EOF
+  tags:
+    - setjavahome
 - template:
     src: templates/hosts.j2
     dest: /root/hosts

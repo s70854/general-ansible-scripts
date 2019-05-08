@@ -8,14 +8,10 @@ objectClass: organizationalRole
 cn: {{ ldap.olcRootCN }} 
 description: LDAP Manager
 
-dn: ou=users,{{ ldap.olcSuffix }}
-objectclass:top
+dn: ou=Users,{{ ldap.olcSuffix }}
 objectClass: organizationalUnit
-ou: users
+ou: Users
 
-dn: ou=groups,{{ ldap.olcSuffix }}
-objectclass:top
+dn: ou=Groups,{{ ldap.olcSuffix }}
 objectClass: organizationalUnit
-ou: groups
-
-
+ou: Groups
