@@ -2,7 +2,11 @@
 # release related configurations
 # for public repos you can get version info from http://public-repo-1.hortonworks.com/HDF/hdf_urlinfo.json / http://public-repo-1.hortonworks.com/HDP/hdp_urlinfo.json
 # eg:  "HDF-3.3"["manifests"]["3.0.1.0"]["centos-ppc7"]  ->   3.3.1.0-10 (just version, HDP/HDF should be dropped)
+
+# vdf file for private repos
+# http://s3.amazonaws.com/dev.hortonworks.com/HDF/centos7-ppc/3.x/BUILDS/3.2.0.0-485/HDF-3.2.0.0-485.xml
 release:
+        publicrepos: no
         ambari: 
             #url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos7/2.x/BUILDS/2.6.2.27-3/ambaribn.repo
             #url: http://public-repo-1.hortonworks.com/ambari/centos7-ppc/2.x/updates/2.6.2.2/ambari.repo
@@ -19,15 +23,17 @@ release:
             #url: http://s3.amazonaws.com/dev.hortonworks.com/HDP/centos7/2.x/BUILDS/2.6.5.1050-37/hdpbn.repo
             #url: http://public-repo-1.hortonworks.com/HDP/centos7-ppc/2.x/updates/2.6.5.1100/hdp.repo
             #version: HDP-2.6.5.1100-53
-            url: http://public-repo-1.hortonworks.com/HDP/centos7-ppc/3.x/updates/3.1.0.0/hdp.repo
-            version: 3.1.0.0-78
+            #url: http://public-repo-1.hortonworks.com/HDP/centos7-ppc/3.x/updates/3.0.1.0/hdp.repo
+            #version: 3.0.1.0-187
             #url:  http://public-repo-1.hortonworks.com/HDP/centos7/3.x/updates/3.0.1.0/hdp.repo
             #version: 3.0.1.0-187
+            url: http://s3.amazonaws.com/dev.hortonworks.com/HDP/centos7-ppc/3.x/BUILDS/3.1.4.0-66/hdpbn.repo
+            version: 3.1.4.0-66
         hdp_gpl:
-            base_url: http://public-repo-1.hortonworks.com/HDP-GPL/centos-ppc7/2.x/updates/3.1.0.0
+            base_url: http://public-repo-1.hortonworks.com/HDP-GPL/centos7-ppc/2.x/updates/3.1.0.0
             version: HDP-3.1-GPL
         hdp_utils:
-            base_url: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/centos7
+            base_url: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/centos7-ppc
             version: HDP-UTILS-1.1.0.22
 
 # cluster properties            
@@ -42,8 +48,8 @@ cluster:
 blueprint:
     #location: hdp310_hdf330_static_01
     #location: hdp_310_static_01    
-    location: hdp310_hdf330_static_02   
-    #location: hdp_310_static_02  
+    #location: hdp310_hdf330_static_02   
+    location: hdp_310_static_02  
 
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le

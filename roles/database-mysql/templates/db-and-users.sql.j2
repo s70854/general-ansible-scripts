@@ -3,6 +3,8 @@ DROP DATABASE IF EXISTS `{{db.name}}`;
 DELETE FROM mysql.user WHERE USER='{{db.name}}';
 FLUSH PRIVILEGES;
 {% endfor %}
+set global innodb_file_format = `BARRACUDA`;
+set global innodb_large_prefix = `ON`;
 commit;
 
 CREATE USER '{{database.dba.name}}'@'%' IDENTIFIED BY '{{database.dba.pswd}}';

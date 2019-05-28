@@ -1,18 +1,19 @@
 [gateway]
-172.31.208.93
+172.31.193.205
 [agent]
-172.31.208.93
-172.31.208.135
-172.31.208.86
+172.31.195.29
+172.31.197.60
 [kdc]
-172.31.208.86
+172.31.195.48
 [ldap]
-172.31.208.86
+172.31.195.48
 [db]
-172.31.208.86
+172.31.195.48
 [all:vars]
 ansible_user=root
 ansible_port=22
 ansible_ssh_private_key_file=/Users/sthota/Documents/ssh-key-ibm.txt
+
+
 
 

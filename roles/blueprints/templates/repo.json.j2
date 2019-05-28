@@ -1,7 +1,13 @@
 {
 "Repositories" : {
+  {% if  release.hdf.install == "yes" and release.hdf.purge == "yes" %}
+  "base_url" : "{{release.hdf.url|regex_replace('^(.*)/.*$','\\1')}}",
+  "verify_base_url" : true,
+  "repo_name":"HDF"
+  {% else %}
   "base_url" : "{{release.hdp.url|regex_replace('^(.*)/.*$','\\1')}}",
   "verify_base_url" : true,
   "repo_name":"HDP"
+  {% endif %}
 }
 }
