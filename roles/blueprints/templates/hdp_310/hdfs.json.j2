@@ -1,0 +1,178 @@
+##########################
+# 1, HOST GROUP DEFINITIONS
+##########################
+
+# GATEWAY
+{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "DATANODE"
+                },
+                {
+                    "name": "HDFS_CLIENT"
+                }{% if blueprint.settings.hdfs.ha %},
+                {
+                    "name": "JOURNALNODE"
+                }{% else %},
+                {
+                    "name": "SECONDARY_NAMENODE"
+                }                
+                {% endif %}  
+{%- endmacro %}
+
+
+
+# AGENT-MASTER
+{% macro host_group_master(joint,blueprint) -%}{{ joint() }}
+                {
+                    "name": "NAMENODE"
+                },                
+                {
+                    "name": "HDFS_CLIENT"
+                },                
+                {
+                    "name": "DATANODE"
+                }
+{%- endmacro %}
+
+
+# AGENT-MASTER(HA)
+{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }} {% if blueprint.settings.hdfs.ha %}
+                {
+                    "name": "NAMENODE"
+                },
+                {
+                    "name": "JOURNALNODE"
+                },{% endif %}
+                {
+                    "name": "DATANODE"
+                },
+                {
+                    "name": "HDFS_CLIENT"
+                }                
+{%- endmacro %}
+
+
+# AGENT-SLAVE
+{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "DATANODE"
+                },
+                {
+                    "name": "HDFS_CLIENT"
+                }                
+{%- endmacro %}
+
+
+
+##########################
+# 2, CONFIGURATIONS
+##########################
+
+    
+
+{% macro configurations(joint,blueprint) -%} {{ joint() }}
+    {
+      "hdfs-site": {
+        "properties": {
+          "dfs.datanode.data.dir": "/grid/0/hadoop/hdfs/data",
+          "dfs.namenode.http-address": "%HOSTGROUP::host_group_master%:20070",
+          "dfs.namenode.secondary.http-address": "0.0.0.0:50090",
+          "dfs.datanode.https.address": "0.0.0.0:20475",
+          "dfs.journalnode.edits.dir": "/hadoop/hdfs/journal",
+          "dfs.support.append": "true",
+          "dfs.namenode.name.dir": "/hadoop/hdfs/namenode",
+          "dfs.namenode.checkpoint.dir": "/hadoop/hdfs/namesecondary",
+          "dfs.disk.balancer.enabled": "true"{% if blueprint.settings.hdfs.ha %},
+          "dfs.namenode.safemode.extension": "5000",
+          "dfs.namenode.checkpoint.period": "21600",
+          "dfs.namenode.handler.count": "40",
+          "dfs.namenode.name.dir.restore": "true",
+          "dfs.https.port": "20470",
+          "dfs.ha.fencing.methods": "shell(/bin/true)",
+          "dfs.namenode.checkpoint.txns": "1000000",
+          "dfs.namenode.accesstime.precision": "0",
+          "dfs.http.policy": "HTTP_ONLY",
+          "dfs.nameservices": "mycluster",
+          "dfs.namenode.rpc-address.mycluster.nn1": "%HOSTGROUP::host_group_master%:8020",
+          "dfs.namenode.safemode.threshold-pct": "1",
+          "dfs.journalnode.http-address": "0.0.0.0:8480",
+          "dfs.namenode.https-address.mycluster.nn2": "%HOSTGROUP::host_group_ha_master%:20470",
+          "dfs.ha.namenodes.mycluster": "nn1,nn2",
+          "dfs.replication.max": "50",
+          "dfs.namenode.https-address": "%HOSTGROUP::host_group_master%:20470",
+          "dfs.client.failover.proxy.provider.mycluster": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
+          "dfs.ha.automatic-failover.enabled": "true",
+          "dfs.namenode.rpc-address.mycluster.nn2": "%HOSTGROUP::host_group_ha_master%:8020",
+          "dfs.namenode.shared.edits.dir": "qjournal://localhost:8485/mycluster",
+          "dfs.namenode.avoid.read.stale.datanode": "true",
+          "dfs.namenode.http-address.mycluster.nn2": "%HOSTGROUP::host_group_ha_master%:20070",
+          "dfs.namenode.rpc-address": "%HOSTGROUP::host_group_master%:8020",
+          "dfs.replication": "3",
+          "dfs.namenode.http-address.mycluster.nn1": "%HOSTGROUP::host_group_master%:20070",
+          "dfs.namenode.avoid.write.stale.datanode": "true",
+          "dfs.hosts.exclude": "/etc/hadoop/conf/dfs.exclude",
+          "dfs.namenode.https-address.mycluster.nn1": "%HOSTGROUP::host_group_master%:20470",
+          "dfs.namenode.checkpoint.edits.dir": "${dfs.namenode.checkpoint.dir}"
+          {% endif %}
+        }
+      }
+    }{{ joint() }}
+    {
+      "hadoop-env": {
+        "properties": {
+          "hdfs_log_dir_prefix": "/grid/0/log/hdfs",
+          "namenode_heapsize": "1500"
+        }
+      }
+    }{{ joint() }}
+    {
+      "core-site": {
+        "properties": {
+          "io.compression.codecs": "org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.SnappyCodec",
+          "hadoop.proxyuser.hcat.groups": "*",
+          "hadoop.proxyuser.oozie.hosts": "*",
+          "hadoop.proxyuser.oozie.groups": "*",
+          "hadoop.proxyuser.hive.hosts": "*",
+          "hadoop.proxyuser.falcon.hosts": "*",
+          "hadoop.proxyuser.hive.groups": "*",
+          "hadoop.proxyuser.falcon.groups": "*",
+          "hadoop.proxyuser.hdfs.hosts": "*",
+          "hadoop.proxyuser.hdfs.groups": "*",
+          "proxyuser_group": "users"{% if blueprint.settings.hdfs.ha %},
+          "ha.failover-controller.active-standby-elector.zk.op.retries": "120",
+          "ha.zookeeper.quorum": "%HOSTGROUP::host_group_slave%:2181",
+          "hadoop.proxyuser.hive.hosts": "*",
+          "hadoop.proxyuser.hcat.hosts": "%HOSTGROUP::host_group_master%,%HOSTGROUP::host_group_ha_master%",
+          "fs.defaultFS": "hdfs://mycluster"          
+          {% endif %}
+        }
+      }
+    }
+
+{%- endmacro %}
+
+
+
+##########################
+# 3, KERBEROS DESCRIPTORS
+##########################
+{% macro kerberos_descriptor_services(joint,kerberos) -%} {{ joint() }}
+        {
+          "components": [
+            {
+              "name": "NAMENODE",
+              "identities": [
+                {
+                  "name": "hdfs",
+                  "principal": {
+                    "value": "${hadoop-env/hdfs_user}@{{ kerberos.realm }}",
+                    "type": "user"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "HDFS",
+          "identities": []
+        }
+{%- endmacro %}

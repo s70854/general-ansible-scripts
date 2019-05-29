@@ -1,0 +1,73 @@
+##########################
+# 1, HOST GROUP DEFINITIONS
+##########################
+
+
+# GATEWAY
+{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }               
+{%- endmacro %}
+
+
+# AGENT-MASTER(HA)
+{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }{% if blueprint.settings.hdfs.ha %},
+                {
+                    "name": "ZKFC"
+                }
+                {%endif%}
+{%- endmacro %}
+
+
+# AGENT-MASTER
+{% macro host_group_master(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                }
+{%- endmacro %}
+
+
+
+# AGENT-SLAVE
+{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "ZOOKEEPER_CLIENT"
+                },
+                {
+                    "name": "ZOOKEEPER_SERVER"
+                }
+{%- endmacro %}
+
+
+
+##########################
+# 2, CONFIGURATIONS
+##########################
+
+{% macro configurations(joint,blueprint) -%} {{ joint() }}
+    {
+      "zoo.cfg": {
+        "properties": {
+          "dataDir": "/grid/0/hadoop/zookeeper",
+          "tickTime": "4500"
+        }
+      }
+    }{{ joint() }}
+    {
+      "zookeeper-env": {
+        "properties": {
+          "zk_log_dir": "/grid/0/log/zookeeper"
+        }
+      }
+    }
+{%- endmacro %}
+
+##########################
+# 3, KERBEROS DESCRIPTORS
+##########################
+{% macro kerberos_descriptor_services(joint,kerberos) -%}
+{%- endmacro %}

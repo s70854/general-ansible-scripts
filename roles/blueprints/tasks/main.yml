@@ -4,13 +4,13 @@
     dest: /root/blueprint.json
     mode: 0755
   tags:
-  - printonly     
+  - printOnly     
 - template: 
     src: templates/{{blueprint.location}}/template.json.j2
     dest: /root/template.json
     mode: 0755
   tags:
-  - printonly     
+  - printOnly     
 - template: 
     src: "templates/{{item}}"
     dest: "/root/{{item}}.json"
@@ -20,7 +20,7 @@
     - repo.json.j2
     - version_def.json.j2
   tags:
-  - printonly     
+  - printOnly     
 - name: Download ambari.repo on agent nodes
   get_url:
     url: "{{release.ambari.url}}"

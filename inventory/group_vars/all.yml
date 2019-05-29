@@ -45,12 +45,28 @@ cluster:
     os: redhat7
 
 # blueprint configurations
+# location: hdp_310_static_02  
+#      - yarn
+#      - mapreduce2
+#      - tez
+#      - hive
+#      - hbase
+#      - infra_solr
+#      - ambari_metrics
+#      - atlas
+#      - kafka
+#      - xasecure     
+#      - ranger_kms
+#      - spark2
+#      - druid
 blueprint:
-    #location: hdp310_hdf330_static_01
-    #location: hdp_310_static_01    
-    #location: hdp310_hdf330_static_02   
-    location: hdp_310_static_02  
-
+    location: hdp_310
+    services:
+        - hdfs
+        - zookeeper
+    settings:
+        hdfs:
+            ha: yes
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
 #                        /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.181-7.b13.el7.ppc64le

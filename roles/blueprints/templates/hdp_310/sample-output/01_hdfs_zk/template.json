@@ -1,0 +1,100 @@
+{
+    "blueprint": "cl1", 
+    "config_recommendation_strategy": "ALWAYS_APPLY_DONT_OVERRIDE_CUSTOM_VALUES", 
+    "credentials": [
+        {
+            "alias": "kdc.admin.credential", 
+            "key": "passW0rd", 
+            "principal": "admin/admin@HDP.COM", 
+            "type": "TEMPORARY"
+        }
+    ], 
+    "default_password": "passW0rd", 
+    "host_groups": [
+        {
+            "hosts": [
+                {
+                    "fqdn": "temp-satya-3hdp3-3"
+                }
+            ], 
+            "name": "host_group_gateway"
+        }, 
+        {
+            "hosts": [
+                {
+                    "fqdn": "temp-satya-3hdp3-2"
+                }
+            ], 
+            "name": "host_group_master"
+        }, 
+        {
+            "hosts": [
+                {
+                    "fqdn": "temp-satya-3hdp3-12"
+                }
+            ], 
+            "name": "host_group_ha_master"
+        }, 
+        {
+            "hosts": [
+                            {
+                    "fqdn": "temp-satya-3hdp3-11"
+                }, 
+                            {
+                    "fqdn": "temp-satya-3hdp3-10"
+                } 
+                        ], 
+            "name": "host_group_slave"
+        }
+    ], 
+    "provision_action": "START_ONLY", 
+        "repository_version": "3.1.4.0-66",
+        "security": {
+            "kerberos_descriptor": {
+            "identities": [
+                {
+                    "name": "smokeuser", 
+                    "principal": {
+                        "type": "user", 
+                        "value": "${cluster-env/smokeuser}@HDP.COM"
+                    }
+                }, 
+                {
+                    "name": "ambari-server", 
+                    "principal": {
+                        "type": "user", 
+                        "value": "ambari-server@HDP.COM"
+                    }
+                }
+            ], 
+            "properties": {
+                "principal_suffix": ""
+            }, 
+            "services": [
+                        
+        {
+          "components": [
+            {
+              "name": "NAMENODE",
+              "identities": [
+                {
+                  "name": "hdfs",
+                  "principal": {
+                    "value": "${hadoop-env/hdfs_user}@HDP.COM",
+                    "type": "user"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "HDFS",
+          "identities": []
+        }
+                    
+              
+            ]
+        }, 
+        "type": "KERBEROS"
+        }
+
+}

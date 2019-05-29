@@ -1,19 +1,23 @@
 [gateway]
 172.31.193.205
 [agent]
-172.31.195.29
+172.31.197.144
+172.31.196.223
+172.31.205.60
 172.31.197.60
 [kdc]
-172.31.195.48
+172.31.204.255
 [ldap]
-172.31.195.48
+172.31.204.255
 [db]
-172.31.195.48
+172.31.204.255
 [all:vars]
 ansible_user=root
 ansible_port=22
 ansible_ssh_private_key_file=/Users/sthota/Documents/ssh-key-ibm.txt
 
 
-
+# NOTE:
+# 1 gateway, agent(3+), kdc/db(1): minium 5 nodes required for blueprint deployments | 8 is recommoneded
+# gateway(1), agent:master(1), agent:ha-master(1), agent:save(1+), kdc/db/ldap(1)
 

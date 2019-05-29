@@ -1,3 +1,6 @@
+
+====================\ COMPLETED
+
 1, perform the common tasks on all the nodes
     Install pexpect. It is required for interactive command line operations
     Install and enable NTP for RedHat systems 
@@ -7,7 +10,70 @@
 3, setup mysql databases
 4, setup kdc
 5, install ambari-server
-========[ 7 minuites so far]
+6, deploy blueprints
 
-6, ? deploy blueprints
-7, ? wire encryption
+======================\ TODO
+7, wire encryption
+8, add templates for all the components
+    components:
+      - accumulo
+      - ambari_infra
+      - ams
+      - atlas
+      - beacon   
+      - dp_profiler_agent
+      - druid
+      - falcon
+      - flume
+      - hbase
+      - hdfs
+      - hive
+      - hs_interfactive
+      - kafka
+      - kerberos
+      - kms
+      - knox
+      - livy
+      - livy2
+      - logsearch
+      - mahout
+      - mapreduce2
+      - nfsgateway
+      - oozie
+      - phoenix
+      - pig
+      - slider
+      - smartsense
+      - spark
+      - spark2
+      - sqoop
+      - storm
+      - superset
+      - tez
+      - xasecure
+      - yarn
+      - zeppelin
+      - zookeeper
+
+
+
+
+Time record:
+infra.yaml  >>> . 3m17sec
+ambari-install.yaml >>>  1m39sec
+blueprint-deploy.yaml >>> 3m29sec
+
+
+
+Note: on Host groups
+1, if is_ha_only{YES,BOTH} && ha=true include
+2, ha_master && ha=true include to GroupType.HA
+
+REQUIRED -> in all groups
+GATEWAY,CLIENT -> gateway group
+MASTER -> master
+SLAVE  -> slave
+ADD_HOST   ?
+HA         ?
+
+

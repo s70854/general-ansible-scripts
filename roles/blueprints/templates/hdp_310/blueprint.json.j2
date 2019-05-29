@@ -1,0 +1,77 @@
+{
+  "Blueprints": {
+    "blueprint_name": "{{cluster.name}}",
+    "stack_name": "HDP",
+    "stack_version": "3.1"
+  },
+  "configurations": [
+    {
+      "cluster-env": {
+        "properties": {
+          "command_retry_max_time_in_sec": "1200",
+          "sysprep_skip_create_users_and_groups" : "true"
+        }
+      }
+    },
+    {% set joint = joiner(",") %}    
+    {% for service in blueprint.services %}
+        {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
+        {{ unit.configurations(joint,blueprint) }}
+    {% endfor %}  
+    {% if kerberos.enable %}
+        {% import 'templates/' + blueprint.location + '/kerberos.json.j2' as unit %}
+        {{ unit.configurations(joint,hostvars,groups,kerberos) }}
+    {% endif %}
+  ],
+  "host_groups": [
+    {
+            "cardinality": "1",
+            "components": [
+    {% set joint = joiner(",") %}
+    {% for service in blueprint.services %}
+        {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
+        {{ unit.host_group_gateway(joint,blueprint) }}
+    {% endfor %}
+    {% if kerberos.enable %}
+        {% import 'templates/' + blueprint.location + '/kerberos.json.j2' as unit %}
+        {{ unit.host_group_gateway(joint,blueprint) }}
+    {% endif %}    
+            ],
+            "name": "host_group_gateway"
+    },
+    {
+            "cardinality": "1",
+            "components": [
+    {% set joint = joiner(",") %}
+    {% for service in blueprint.services %}
+        {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
+        {{ unit.host_group_master(joint,blueprint) }}
+    {% endfor %}          
+            ],
+            "name": "host_group_master"
+    },
+    {
+            "cardinality": "1",
+            "components": [
+    {% set joint = joiner(",") %}
+    {% for service in blueprint.services %}
+        {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
+        {{ unit.host_group_ha_master(joint,blueprint) }}
+    {% endfor %}         
+            ],
+            "name": "host_group_ha_master"
+    },
+    {
+            "cardinality": "1",
+            "components": [
+    {% set joint = joiner(",") %}
+    {% for service in blueprint.services %}
+        {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
+        {{ unit.host_group_slave(joint,blueprint) }}
+    {% endfor %}           
+            ],
+            "name": "host_group_slave"
+    }
+  ]
+
+}
