@@ -1,0 +1,64 @@
+##########################
+# 1, HOST GROUP DEFINITIONS
+##########################
+
+
+# GATEWAY
+{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "MAPREDUCE2_CLIENT"
+                }               
+{%- endmacro %}
+
+
+# AGENT-MASTER(HA)
+{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "MAPREDUCE2_CLIENT"
+                }
+{%- endmacro %}
+
+
+# AGENT-MASTER
+{% macro host_group_master(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "MAPREDUCE2_CLIENT"
+                },
+                {
+                    "name": "HISTORYSERVER"
+                }
+{%- endmacro %}
+
+
+
+# AGENT-SLAVE
+{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+                {
+                    "name": "MAPREDUCE2_CLIENT"
+                }
+{%- endmacro %}
+
+
+
+##########################
+# 2, CONFIGURATIONS
+##########################
+
+{% macro configurations(joint,blueprint) -%} {{ joint() }}
+    {
+      "mapred-env": {
+        "properties": {
+          {%if blueprint.settings.mapreduce2.ha %}
+          "mapreduce.am.max-attempts": "20", {% endif %}
+          "mapreduce_log_dir_prefix": "/grid/0/log/hadoop-mapreduce",
+          "mapred_log_dir_prefix": "/grid/0/log/hadoop-mapreduce"
+        }
+      }
+    }
+{%- endmacro %}
+
+##########################
+# 3, KERBEROS DESCRIPTORS
+##########################
+{% macro kerberos_descriptor_services(joint,kerberos) -%}
+{%- endmacro %}
