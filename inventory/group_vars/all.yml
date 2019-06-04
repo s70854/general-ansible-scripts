@@ -64,9 +64,16 @@ blueprint:
     services:
         - hdfs
         - zookeeper
+        - yarn
+        - mapreduce2
+        - tez
     settings:
         hdfs:
             ha: yes
+        yarn:
+            ha: yes
+        mapreduce2:
+            ha: yes             
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
 #                        /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.181-7.b13.el7.ppc64le
