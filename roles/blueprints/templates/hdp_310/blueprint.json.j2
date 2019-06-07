@@ -16,11 +16,11 @@
     {% set joint = joiner(",") %}    
     {% for service in blueprint.services %}
         {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
-        {{ unit.configurations(joint,blueprint) }}
+        {{ unit.configurations(joint,hostvars,groups) }}
     {% endfor %}  
     {% if kerberos.enable %}
         {% import 'templates/' + blueprint.location + '/kerberos.json.j2' as unit %}
-        {{ unit.configurations(joint,hostvars,groups,kerberos) }}
+        {{ unit.configurations(joint,hostvars,groups) }}
     {% endif %}
   ],
   "host_groups": [
@@ -30,11 +30,11 @@
     {% set joint = joiner(",") %}
     {% for service in blueprint.services %}
         {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
-        {{ unit.host_group_gateway(joint,blueprint) }}
+        {{ unit.host_group_gateway(joint,hostvars,groups) }}
     {% endfor %}
     {% if kerberos.enable %}
         {% import 'templates/' + blueprint.location + '/kerberos.json.j2' as unit %}
-        {{ unit.host_group_gateway(joint,blueprint) }}
+        {{ unit.host_group_gateway(joint,hostvars,groups) }}
     {% endif %}    
             ],
             "name": "host_group_gateway"
@@ -45,7 +45,7 @@
     {% set joint = joiner(",") %}
     {% for service in blueprint.services %}
         {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
-        {{ unit.host_group_master(joint,blueprint) }}
+        {{ unit.host_group_master(joint,hostvars,groups) }}
     {% endfor %}          
             ],
             "name": "host_group_master"
@@ -56,7 +56,7 @@
     {% set joint = joiner(",") %}
     {% for service in blueprint.services %}
         {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
-        {{ unit.host_group_ha_master(joint,blueprint) }}
+        {{ unit.host_group_ha_master(joint,hostvars,groups) }}
     {% endfor %}         
             ],
             "name": "host_group_ha_master"
@@ -67,7 +67,7 @@
     {% set joint = joiner(",") %}
     {% for service in blueprint.services %}
         {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
-        {{ unit.host_group_slave(joint,blueprint) }}
+        {{ unit.host_group_slave(joint,hostvars,groups) }}
     {% endfor %}           
             ],
             "name": "host_group_slave"

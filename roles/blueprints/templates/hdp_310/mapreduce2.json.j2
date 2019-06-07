@@ -4,7 +4,7 @@
 
 
 # GATEWAY
-{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "MAPREDUCE2_CLIENT"
                 }               
@@ -12,7 +12,7 @@
 
 
 # AGENT-MASTER(HA)
-{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "MAPREDUCE2_CLIENT"
                 }
@@ -20,7 +20,7 @@
 
 
 # AGENT-MASTER
-{% macro host_group_master(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "MAPREDUCE2_CLIENT"
                 },
@@ -32,7 +32,7 @@
 
 
 # AGENT-SLAVE
-{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "MAPREDUCE2_CLIENT"
                 }
@@ -44,11 +44,11 @@
 # 2, CONFIGURATIONS
 ##########################
 
-{% macro configurations(joint,blueprint) -%} {{ joint() }}
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
     {
       "mapred-env": {
         "properties": {
-          {%if blueprint.settings.mapreduce2.ha %}
+          {%if hostvars[groups['all'][0]].blueprint.settings.mapreduce2.ha %}
           "mapreduce.am.max-attempts": "20", {% endif %}
           "mapreduce_log_dir_prefix": "/grid/0/log/hadoop-mapreduce",
           "mapred_log_dir_prefix": "/grid/0/log/hadoop-mapreduce"
@@ -60,5 +60,5 @@
 ##########################
 # 3, KERBEROS DESCRIPTORS
 ##########################
-{% macro kerberos_descriptor_services(joint,kerberos) -%}
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%}
 {%- endmacro %}

@@ -1,0 +1,92 @@
+##########################
+# 1, HOST GROUP DEFINITIONS
+##########################
+
+
+# GATEWAY
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "HIVE_CLIENT"
+                }               
+{%- endmacro %}
+
+
+# AGENT-MASTER(HA)
+{% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "HIVE_CLIENT"
+                },
+                {
+                    "name": "HIVE_METASTORE"
+                }
+{%- endmacro %}
+
+
+# AGENT-MASTER
+{% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "HIVE_CLIENT"
+                },
+                {
+                    "name": "HIVE_SERVER"
+                }
+{%- endmacro %}
+
+
+
+# AGENT-SLAVE
+{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "HIVE_CLIENT"
+                }
+{%- endmacro %}
+
+
+
+##########################
+# 2, CONFIGURATIONS
+##########################
+
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
+    {
+      "hive-site": {
+        "properties": { 
+          "hive.security.authorization.enabled": "true",
+          "hive.server2.enable.doAs": "false",
+          "hive.query.results.cache.enabled": "false",
+          "ambari.hive.db.schema.name": "hivedb",
+          "javax.jdo.option.ConnectionUserName": "{{hostvars[groups['all'][0]].database.users.hivedb.name}}",
+          "javax.jdo.option.ConnectionDriverName": "com.mysql.jdbc.Driver",
+          "javax.jdo.option.ConnectionPassword": "{{hostvars[groups['all'][0]].database.users.hivedb.pswd}}",
+          "javax.jdo.option.ConnectionURL": "jdbc:mysql://{{hostvars[groups['db'][0]].ansible_fqdn}}/hivedb?createDatabaseIfNotExist=true" {%if hostvars[groups['all'][0]].blueprint.settings.hive.ha %},
+          "hive.metastore.uris": "thrift://%HOSTGROUP::host_group_ha_master%:9083,thrift://%HOSTGROUP::host_group_master%:9083"
+          {% endif %}
+        }
+      }
+    } {{ joint() }}
+    {
+      "hive-env": {
+        "properties": {
+          "hive_log_dir": "/grid/0/log/hive",
+          "hive_database_type": "mysql",
+          "hive_metastore_user_passwd": "{{hostvars[groups['all'][0]].database.dba.pswd}}",
+          "hive_existing_mysql_database": "MySQL",
+          "hive_database": "Existing MySQL / MariaDB Database"
+        }
+      }
+    } {{ joint() }}
+    {
+      "hiveserver2-site": {
+        "properties": {
+          "hive.security.authenticator.manager": "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator",
+          "hive.conf.restricted.list": "hive.security.authorization.enabled,hive.security.authorization.manager,hive.security.authenticator.manager"
+        }
+      }
+    }
+{%- endmacro %}
+
+##########################
+# 3, KERBEROS DESCRIPTORS
+##########################
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%}
+{%- endmacro %}

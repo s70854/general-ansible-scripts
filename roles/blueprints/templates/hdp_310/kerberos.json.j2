@@ -4,7 +4,7 @@
 
 
 # GATEWAY
-{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "KERBEROS_CLIENT"
                 }               
@@ -12,18 +12,18 @@
 
 
 # AGENT-MASTER(HA)
-{% macro host_group_ha_master(joint,blueprint) -%}
+{% macro host_group_ha_master(joint,hostvars,groups) -%}
 {%- endmacro %}
 
 
 # AGENT-MASTER
-{% macro host_group_master(joint,blueprint) -%}
+{% macro host_group_master(joint,hostvars,groups) -%}
 {%- endmacro %}
 
 
 
 # AGENT-SLAVE
-{% macro host_group_slave(joint,blueprint) -%}
+{% macro host_group_slave(joint,hostvars,groups) -%}
 {%- endmacro %}
 
 
@@ -32,7 +32,7 @@
 # 2, CONFIGURATIONS
 ##########################
 
-{% macro configurations(joint,hostvars,groups,kerberos) -%} {{ joint() }}
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
     {
             "kerberos-env": {
                 "properties": {
@@ -40,7 +40,7 @@
                     "encryption_types": "aes des3-cbc-sha1 rc4 des-cbc-md5", 
                     "kdc_hosts": "{{hostvars[groups['kdc'][0]].ansible_fqdn}}", 
                     "kdc_type": "mit-kdc", 
-                    "realm": "{{kerberos.realm}}", 
+                    "realm": "{{hostvars[groups['all'][0]].kerberos.realm}}", 
                     "service_check_principal_name": "cl1-7D6HQ1NTHV"
                 }
             }
@@ -51,23 +51,5 @@
 ##########################
 # 3, KERBEROS DESCRIPTORS
 ##########################
-{% macro kerberos_descriptor_services(joint,kerberos) -%} {{ joint() }}
-        {
-          "components": [
-            {
-              "name": "NAMENODE",
-              "identities": [
-                {
-                  "name": "hdfs",
-                  "principal": {
-                    "value": "${hadoop-env/hdfs_user}@${{ kerberos.realm }}",
-                    "type": "user"
-                  }
-                }
-              ]
-            }
-          ],
-          "name": "HDFS",
-          "identities": []
-        }
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%} 
 {%- endmacro %}

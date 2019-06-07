@@ -46,34 +46,41 @@ cluster:
 
 # blueprint configurations
 # location: hdp_310_static_02  
-#      - yarn
-#      - mapreduce2
-#      - tez
-#      - hive
-#      - hbase
-#      - infra_solr
-#      - ambari_metrics
+
 #      - atlas
-#      - kafka
-#      - xasecure     
-#      - ranger_kms
 #      - spark2
 #      - druid
+#      - xasecure     
+
+#      - ranger_kms
+#      - kafka
+#      - ambari_infra
+#      - ambari_metrics   
+
 blueprint:
     location: hdp_310
-    services:
+    services: 
         - hdfs
         - zookeeper
         - yarn
         - mapreduce2
         - tez
+        - hive
+        - hbase
+ 
     settings:
         hdfs:
             ha: yes
         yarn:
             ha: yes
         mapreduce2:
-            ha: yes             
+            ha: yes    
+        hbase:
+            ha: yes  
+        hive:
+            ha: yes
+
+            
 # java-configurations
 # ibm-cloud  java_home:  /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.ppc64le
 #                        /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.181-7.b13.el7.ppc64le

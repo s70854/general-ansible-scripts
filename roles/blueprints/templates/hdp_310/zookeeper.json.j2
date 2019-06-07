@@ -4,7 +4,7 @@
 
 
 # GATEWAY
-{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "ZOOKEEPER_CLIENT"
                 }               
@@ -12,10 +12,10 @@
 
 
 # AGENT-MASTER(HA)
-{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "ZOOKEEPER_CLIENT"
-                }{% if blueprint.settings.hdfs.ha %},
+                }{% if hostvars[groups['all'][0]].blueprint.settings.hdfs.ha %},
                 {
                     "name": "ZKFC"
                 }
@@ -24,7 +24,7 @@
 
 
 # AGENT-MASTER
-{% macro host_group_master(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "ZOOKEEPER_CLIENT"
                 }
@@ -33,7 +33,7 @@
 
 
 # AGENT-SLAVE
-{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "ZOOKEEPER_CLIENT"
                 },
@@ -48,7 +48,7 @@
 # 2, CONFIGURATIONS
 ##########################
 
-{% macro configurations(joint,blueprint) -%} {{ joint() }}
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
     {
       "zoo.cfg": {
         "properties": {
@@ -69,5 +69,5 @@
 ##########################
 # 3, KERBEROS DESCRIPTORS
 ##########################
-{% macro kerberos_descriptor_services(joint,kerberos) -%}
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%}
 {%- endmacro %}

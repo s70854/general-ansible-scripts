@@ -1,0 +1,97 @@
+##########################
+# 1, HOST GROUP DEFINITIONS
+##########################
+
+
+# GATEWAY
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "METRICS_MONITOR"
+                }               
+{%- endmacro %}
+
+
+# AGENT-MASTER(HA)
+{% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "METRICS_MONITOR"
+                }
+{%- endmacro %}
+
+
+# AGENT-MASTER
+{% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "METRICS_MONITOR"
+                },
+                {
+                    "name": "METRICS_COLLECTOR"
+                },
+                {
+                    "name": "METRICS_GRAFANA"
+                }
+{%- endmacro %}
+
+
+
+# AGENT-SLAVE
+{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
+                {
+                    "name": "METRICS_MONITOR"
+                }
+{%- endmacro %}
+
+
+
+##########################
+# 2, CONFIGURATIONS
+##########################
+
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
+    {
+      "ams-env": {
+        "properties": {
+          "metrics_collector_log_dir": "/grid/0/log/metric_collector",
+          "metrics_monitor_log_dir": "/grid/0/log/metric_monitor"
+        }
+      }
+    },
+    {
+      "ams-grafana-env": {
+        "properties": {
+          "metrics_grafana_password": "admin"
+        }
+      }
+    },
+    {
+      "ams-site": {
+        "properties": {
+          "timeline.metrics.service.rpc.address": "0.0.0.0:20200",
+          "timeline.metrics.hbase.init.check.enabled": "false"
+        }
+      }
+    } {%if 'hbase' in hostvars[groups['all'][0]].blueprint.services %},
+    {
+      "ams-hbase-env": {
+        "properties": {
+          "hbase_log_dir": "/grid/0/log/metric_collector"
+        }
+      }
+    },
+    {
+      "ams-hbase-site": {
+        "properties": {
+          "hbase.rootdir": "file:///grid/0/lib/ambari-metrics-collector/hbase",
+          "hbase.tmp.dir": "/grid/0/lib/ambari-metrics-collector/hbase-tmp"
+        }
+      }
+    }
+    {% endif %}
+    
+{%- endmacro %}
+
+##########################
+# 3, KERBEROS DESCRIPTORS
+##########################
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%}
+{%- endmacro %}

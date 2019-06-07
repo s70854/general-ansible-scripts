@@ -4,7 +4,7 @@
 
 
 # GATEWAY
-{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "YARN_CLIENT"
                 }               
@@ -12,7 +12,7 @@
 
 
 # AGENT-MASTER(HA)
-{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "YARN_CLIENT"
                 },
@@ -23,7 +23,7 @@
 
 
 # AGENT-MASTER
-{% macro host_group_master(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "YARN_CLIENT"
                 },
@@ -41,7 +41,7 @@
 
 
 # AGENT-SLAVE
-{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "NODEMANAGER"
                 },
@@ -56,11 +56,11 @@
 # 2, CONFIGURATIONS
 ##########################
 
-{% macro configurations(joint,blueprint) -%} {{ joint() }}
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
     {
       "yarn-site": {
         "properties": {
-          {% if blueprint.settings.yarn.ha %}
+          {% if hostvars[groups['all'][0]].blueprint.settings.yarn.ha %}
           "yarn.resourcemanager.am.max-attempts": "20",
           "yarn.nodemanager.recovery.enabled": "true",
           "yarn.resourcemanager.recovery.enabled": "true",
@@ -123,5 +123,5 @@
 ##########################
 # 3, KERBEROS DESCRIPTORS
 ##########################
-{% macro kerberos_descriptor_services(joint,kerberos) -%}
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%}
 {%- endmacro %}

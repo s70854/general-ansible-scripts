@@ -78,7 +78,7 @@
     {% set joint = joiner(",") %}
     {% for service in blueprint.services %}
         {% import 'templates/' + blueprint.location + '/' + service + '.json.j2' as unit %}
-        {{ unit.kerberos_descriptor_services(joint,kerberos) }}
+        {{ unit.kerberos_descriptor_services(joint,hostvars,groups) }}
     {% endfor %}          
             ]
         }, 

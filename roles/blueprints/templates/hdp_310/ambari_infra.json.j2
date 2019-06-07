@@ -6,7 +6,7 @@
 # GATEWAY
 {% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
                 {
-                    "name": "TEZ_CLIENT"
+                    "name": "INFRA_SOLR_CLIENT"
                 }               
 {%- endmacro %}
 
@@ -14,7 +14,7 @@
 # AGENT-MASTER(HA)
 {% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
-                    "name": "TEZ_CLIENT"
+                    "name": "INFRA_SOLR_CLIENT"
                 }
 {%- endmacro %}
 
@@ -22,17 +22,14 @@
 # AGENT-MASTER
 {% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
-                    "name": "TEZ_CLIENT"
+                    "name": "INFRA_SOLR"
                 }
 {%- endmacro %}
 
 
 
 # AGENT-SLAVE
-{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
-                {
-                    "name": "TEZ_CLIENT"
-                }
+{% macro host_group_slave(joint,hostvars,groups) -%}
 {%- endmacro %}
 
 
@@ -43,12 +40,9 @@
 
 {% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
     {
-      "tez-site": {
+      "infra-solr-client-log4j": {
         "properties": {
-          "tez.am.resource.memory.mb": "2048",
-          "tez.runtime.io.sort.mb": "819",
-          "tez.runtime.unordered.output.buffer.size-mb": "184",
-          "tez.lib.uris": "/hdp/apps/${hdp.version}/tez/tez.tar.gz"
+          "infra_solr_client_log_dir": "/grid/0/log/ambari-infra-solr-client"
         }
       }
     }

@@ -3,13 +3,13 @@
 ##########################
 
 # GATEWAY
-{% macro host_group_gateway(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_gateway(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "DATANODE"
                 },
                 {
                     "name": "HDFS_CLIENT"
-                }{% if blueprint.settings.hdfs.ha %},
+                }{% if hostvars[groups['all'][0]].blueprint.settings.hdfs.ha %},
                 {
                     "name": "JOURNALNODE"
                 }{% else %},
@@ -22,7 +22,7 @@
 
 
 # AGENT-MASTER
-{% macro host_group_master(joint,blueprint) -%}{{ joint() }}
+{% macro host_group_master(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "NAMENODE"
                 },                
@@ -36,7 +36,7 @@
 
 
 # AGENT-MASTER(HA)
-{% macro host_group_ha_master(joint,blueprint) -%} {{ joint() }} {% if blueprint.settings.hdfs.ha %}
+{% macro host_group_ha_master(joint,hostvars,groups) -%} {{ joint() }} {% if hostvars[groups['all'][0]].blueprint.settings.hdfs.ha %}
                 {
                     "name": "NAMENODE"
                 },
@@ -53,7 +53,7 @@
 
 
 # AGENT-SLAVE
-{% macro host_group_slave(joint,blueprint) -%} {{ joint() }}
+{% macro host_group_slave(joint,hostvars,groups) -%} {{ joint() }}
                 {
                     "name": "DATANODE"
                 },
@@ -70,7 +70,7 @@
 
     
 
-{% macro configurations(joint,blueprint) -%} {{ joint() }}
+{% macro configurations(joint,hostvars,groups) -%} {{ joint() }}
     {
       "hdfs-site": {
         "properties": {
@@ -82,7 +82,7 @@
           "dfs.support.append": "true",
           "dfs.namenode.name.dir": "/hadoop/hdfs/namenode",
           "dfs.namenode.checkpoint.dir": "/hadoop/hdfs/namesecondary",
-          "dfs.disk.balancer.enabled": "true"{% if blueprint.settings.hdfs.ha %},
+          "dfs.disk.balancer.enabled": "true"{% if hostvars[groups['all'][0]].blueprint.settings.hdfs.ha %},
           "dfs.namenode.safemode.extension": "5000",
           "dfs.namenode.checkpoint.period": "21600",
           "dfs.namenode.handler.count": "40",
@@ -116,7 +116,7 @@
           {% endif %}
         }
       }
-    }{{ joint() }}
+    } {{ joint() }}
     {
       "hadoop-env": {
         "properties": {
@@ -124,7 +124,7 @@
           "namenode_heapsize": "1500"
         }
       }
-    }{{ joint() }}
+    } {{ joint() }}
     {
       "core-site": {
         "properties": {
@@ -138,7 +138,7 @@
           "hadoop.proxyuser.falcon.groups": "*",
           "hadoop.proxyuser.hdfs.hosts": "*",
           "hadoop.proxyuser.hdfs.groups": "*",
-          "proxyuser_group": "users"{% if blueprint.settings.hdfs.ha %},
+          "proxyuser_group": "users"{% if hostvars[groups['all'][0]].blueprint.settings.hdfs.ha %},
           "ha.failover-controller.active-standby-elector.zk.op.retries": "120",
           "ha.zookeeper.quorum": "%HOSTGROUP::host_group_slave%:2181",
           "hadoop.proxyuser.hive.hosts": "*",
@@ -156,7 +156,7 @@
 ##########################
 # 3, KERBEROS DESCRIPTORS
 ##########################
-{% macro kerberos_descriptor_services(joint,kerberos) -%} {{ joint() }}
+{% macro kerberos_descriptor_services(joint,hostvars,groups) -%} {{ joint() }}
         {
           "components": [
             {
@@ -165,7 +165,7 @@
                 {
                   "name": "hdfs",
                   "principal": {
-                    "value": "${hadoop-env/hdfs_user}@{{ kerberos.realm }}",
+                    "value": "${hadoop-env/hdfs_user}@{{ hostvars[groups['all'][0]].kerberos.realm }}",
                     "type": "user"
                   }
                 }
